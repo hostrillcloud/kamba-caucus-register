@@ -341,7 +341,7 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
   <div class="legal"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Your information is confidential and used only to administer the cover. © Kamba Caucus</div>
 </footer>
 
-<div class="overlay" id="overlay" role="status" aria-live="assertive"><div class="box"><div class="spin"></div>Securing your registration…</div></div>
+<div class="overlay" id="overlay" role="status" aria-live="assertive"><div class="box"><div class="spin"></div><span id="overlayMsg">Securing your registration…</span></div></div>
 
 <script>
 (function () {
@@ -572,10 +572,26 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
     var top = $('#stepper').getBoundingClientRect().top + window.pageYOffset - 12;
     if (window.pageYOffset > top) window.scrollTo({ top: top, behavior: 'smooth' });
   }
+  // Family logic: dates must make sense relative to the principal member / spouse.
+  function shiftYears(iso, n) { var p = iso.split('-'); return (+p[0] + n) + '-' + p[1] + '-' + p[2]; }
+  function dobOf(k) { var el = document.getElementById(k + '-dob'); var v = el ? el.value : ''; return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : ''; }
+  function familyDobError(k) {
+    var d = dobOf(k), pd = dobOf('p'), sd = dobOf('s');
+    if (!d) return '';
+    if (k === 's' && ageOn(d) < 18) return 'Your spouse must be at least 18 years old.';
+    if (isChild(k) && pd && d < shiftYears(pd, 12)) return "A child must be born at least 12 years after the principal member's date of birth.";
+    if ((k === 'fa' || k === 'mo') && pd && d > shiftYears(pd, -12)) return "A parent must be born at least 12 years before the principal member's date of birth.";
+    if ((k === 'fil' || k === 'mil') && sd && d > shiftYears(sd, -12)) return "A parent-in-law must be born at least 12 years before your spouse's date of birth.";
+    return '';
+  }
   function validateStep(n) {
     var first = null, b;
     function q(name, ok) { b = setErr(name, ok ? '' : 'x'); if (b && !first) first = b; }
-    function per(k, spec) { b = validPerson(k, spec); if (b && !first) first = b; }
+    function per(k, spec) {
+      b = validPerson(k, spec); if (b && !first) first = b;
+      var box = document.querySelector('[data-f="' + k + '-dob"]');
+      if (box && !box.classList.contains('invalid')) { b = setErr(k + '-dob', familyDobError(k)); if (b && !first) first = b; }
+    }
     if (n === 1) per('p', SPECS.p);
     if (n === 2) { q('hasSpouse', radio('hasSpouse')); if (radio('hasSpouse') === 'yes') per('s', SPECS.s); }
     if (n === 3) {
@@ -699,18 +715,37 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
       }
     };
     var onFail = function () { done(); showServerErrors(['We could not reach the registration service. Please check your connection and press Submit again. Your details are still here.']); };
-    if (window.google && google.script && google.script.run) {
-      google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail).submitRegistration(payload());
-    } else {
+
+    // The same payload (same submission ID) is resent on temporary failures.
+    // The server records each submission ID once, so retries can never duplicate a family.
+    var body = payload(), WAITS = [3000, 7000, 15000], attempt = 0;
+    var msg = $('#overlayMsg');
+    function retryOr(giveUp) {
+      if (attempt < WAITS.length) {
+        if (msg) msg.textContent = 'Connection is slow. Still securing your registration…';
+        setTimeout(send, WAITS[attempt++]);
+      } else giveUp();
+    }
+    function handle(res) {
+      if (res && !res.ok && res.retry) return retryOr(function () { onOk(res); });
+      onOk(res);
+    }
+    function send() {
+      if (window.google && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(handle).withFailureHandler(function () { retryOr(onFail); }).submitRegistration(body);
+        return;
+      }
       // Public page: post without cookies so multiple Google sign-ins on the phone cannot interfere.
       var ctl = window.AbortController ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 60000);
-      fetch(API_URL, { method: 'POST', body: JSON.stringify(payload()), credentials: 'omit', redirect: 'follow',
+      fetch(API_URL, { method: 'POST', body: JSON.stringify(body), credentials: 'omit', redirect: 'follow',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, signal: ctl ? ctl.signal : undefined })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-        .then(function (res) { clearTimeout(timer); onOk(res); })
-        .catch(function () { clearTimeout(timer); onFail(); });
+        .then(function (res) { clearTimeout(timer); handle(res); })
+        .catch(function () { clearTimeout(timer); retryOr(onFail); });
     }
+    if (msg) msg.textContent = 'Securing your registration…';
+    send();
   }
 
   window.addEventListener('beforeunload', function (e) { if (dirty && !submitted) { e.preventDefault(); e.returnValue = ''; } });
