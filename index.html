@@ -387,7 +387,10 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
       : 'Enter the names exactly as they appear on the National ID.';
     h += field(k, 'name', 'Full name <span class="opt">(as per ' + (child ? 'birth certificate / National ID' : 'National ID') + ')</span>',
       '<input class="input" id="' + k + '-name" type="text" maxlength="80" autocomplete="' + (k === 'p' ? 'name' : 'off') + '" placeholder="e.g. Elijah Mutua Muema">', 'full', nameHint);
-    h += field(k, 'dob', 'Date of birth', '<input class="input" id="' + k + '-dob" type="date" min="1900-01-01" max="' + todayISO + '"' + (k === 'p' ? ' autocomplete="bday"' : '') + '>', '');
+    var elder = /^(fa|mo|fil|mil)$/.test(k);
+    var dMin = elder ? plusDay(shiftYears(todayISO, -76)) : '1900-01-01', dMax = elder ? shiftYears(todayISO, -30) : todayISO;
+    h += field(k, 'dob', 'Date of birth', '<input class="input" id="' + k + '-dob" type="date" min="' + dMin + '" max="' + dMax + '"' + (k === 'p' ? ' autocomplete="bday"' : '') + '>', '',
+      elder ? 'Must be aged between 30 and 75 years.' : '');
     if (spec.gender) h += field(k, 'gender', 'Gender', seg(k + '-gender', ['Male', 'Female']), '');
     else h += '<div class="field"></div>';
     if (child) {
@@ -574,11 +577,16 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
   }
   // Family logic: dates must make sense relative to the principal member / spouse.
   function shiftYears(iso, n) { var p = iso.split('-'); return (+p[0] + n) + '-' + p[1] + '-' + p[2]; }
+  function plusDay(iso) { var p = iso.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2] + 1); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
   function dobOf(k) { var el = document.getElementById(k + '-dob'); var v = el ? el.value : ''; return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : ''; }
   function familyDobError(k) {
     var d = dobOf(k), pd = dobOf('p'), sd = dobOf('s');
     if (!d) return '';
     if (k === 's' && ageOn(d) < 18) return 'Your spouse must be at least 18 years old.';
+    if (/^(fa|mo|fil|mil)$/.test(k)) {
+      var a = ageOn(d), who = (k === 'fil' || k === 'mil') ? 'Parents-in-law' : 'Parents';
+      if (a < 30 || a > 75) return who + ' must be between 30 and 75 years old (this date gives ' + a + ' years).';
+    }
     if (isChild(k) && pd && d < shiftYears(pd, 12)) return "A child must be born at least 12 years after the principal member's date of birth.";
     if ((k === 'fa' || k === 'mo') && pd && d > shiftYears(pd, -12)) return "A parent must be born at least 12 years before the principal member's date of birth.";
     if ((k === 'fil' || k === 'mil') && sd && d > shiftYears(sd, -12)) return "A parent-in-law must be born at least 12 years before your spouse's date of birth.";
