@@ -118,6 +118,10 @@ button,input,select{font:inherit;color:inherit}
 /* Person card */
 .person{border:1px solid var(--line);border-radius:14px;padding:20px 20px 4px;margin:0 0 18px;background:linear-gradient(#fff,#fff) padding-box;position:relative}
 .person:before{content:"";position:absolute;left:-1px;top:18px;bottom:18px;width:3px;border-radius:3px;background:var(--gold)}
+.person.focus{border:2px solid var(--gold);box-shadow:0 0 0 5px rgba(201,162,39,.16),0 14px 30px -18px rgba(176,138,28,.6);animation:in .4s ease}
+.need{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7A4E00;background:#FFE9A8;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.person-head{flex-wrap:wrap;row-gap:8px}
+@media (max-width:620px){.need{order:-1;flex-basis:100%;max-width:max-content;margin-left:0}}
 .person-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .person-head h3{margin:0;font-size:16.5px;color:var(--navy)}
 .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-2);background:var(--gold-soft);padding:4px 9px;border-radius:999px}
@@ -810,7 +814,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function show(n) {
     cur = n;
     $$('.step').forEach(function (s) { s.classList.toggle('active', +s.getAttribute('data-step') === n); });
-    $('#back').style.visibility = (n === 1 && TOKEN) ? 'hidden' : 'visible';
+    var noBack = TOKEN && (FOCUS ? !FOCUS.some(function (s) { return s < n; }) : n === 1);
+    $('#back').style.visibility = noBack ? 'hidden' : 'visible';
     queueSave();                                            // remember which part the member is on
     var nx = $('#next');
     if (n === 6) { buildReview(); nx.className = 'btn btn-gold'; nx.innerHTML = 'Submit registration<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
@@ -874,8 +879,19 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function next() {
     if (sending || checking) return;
     if (!validateStep(cur)) return;
+    if (cur === 6 && TOKEN) {                               // update: re-check the parts the member skipped
+      for (var s = 1; s <= 5; s++) {
+        if (!applicable(s)) continue;
+        show(s);
+        if (!validateStep(s)) return;
+      }
+      show(6); $('#consent').checked = true;               // all good — return to Review (declaration already ticked)
+    }
     if (cur === 6) return submit();
-    var go = function () { var n = cur + 1; while (!applicable(n)) n++; show(n); };
+    var go = function () {
+      if (TOKEN && FOCUS) { var nx = FOCUS.filter(function (s) { return s > cur; })[0]; show(nx || 6); return; }   // update: only the parts that need attention
+      var n = cur + 1; while (!applicable(n)) n++; show(n);
+    };
     if (cur === 1) return guardThen(go);
     go();
   }
@@ -928,6 +944,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     }, 250);
   });
   function back() {
+    if (TOKEN && FOCUS) { var pv = FOCUS.filter(function (s) { return s < cur; }); if (pv.length) show(pv[pv.length - 1]); return; }
     if (cur === 1) { if (!TOKEN) exitToStart(); return; }      // Back on Part 1 → start page (progress is saved)
     var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n));
   }
@@ -1071,6 +1088,27 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
   // ── Update link mode ──
   var TOKEN = (function () { var m = /[?&]u=([A-Za-z0-9]{40,80})(?:&|$)/.exec(window.location.search); return m ? m[1] : ''; })();
+  // Focused update: open straight at the part(s) that need attention and highlight the exact person.
+  var FOCUS = null;
+  function updateFocus(f) {
+    var parts = {}, marks = 0;
+    var mark = function (k, part) {
+      var card = document.querySelector('[data-person="' + k + '"]');
+      if (!card) return;
+      card.classList.add('focus');
+      var head = card.querySelector('.person-head');
+      if (head && !head.querySelector('.need')) head.insertAdjacentHTML('beforeend', '<span class="need">Needs your attention</span>');
+      parts[part] = 1; marks++;
+    };
+    (f.children || []).forEach(function (c, i) { var k = 'c' + (i + 1); if (childAge(k) >= 18 && !c.inSchool) mark(k, 3); });
+    [['fa', 4, '#slot-father'], ['mo', 4, '#slot-mother'], ['fil', 5, '#slot-fil'], ['mil', 5, '#slot-mil']].forEach(function (x) {
+      var box = document.getElementById(x[0] + '-75');
+      if (!$(x[2]).hidden && box && !box.hidden) mark(x[0], x[1]);
+    });
+    var list = Object.keys(parts).map(Number).sort(function (a, b) { return a - b; });
+    list.marks = marks;
+    return list;
+  }
   function setVal(id, v) { var el = document.getElementById(id); if (el && v != null) el.value = v; }
   function setRadio(name, v) { $$('input[name="' + name + '"]').forEach(function (r) { r.checked = v != null && r.value === String(v); }); }
   function setCheck(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
@@ -1119,12 +1157,16 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
           return fail((res && res.errors && res.errors[0]) || 'This update link could not be opened.');
         }
         fill(res.family);
+        FOCUS = updateFocus(res.family);
         $('#ubannerText').innerHTML = 'You are <b>updating</b> your registration <b>(Submission Reference No. ' + esc(res.ref) + ')</b>. ' +
-          'Please review every part, complete anything highlighted, and submit. This secure link expires on <b>' + esc(res.expires) + '</b>.';
+          (FOCUS.length
+            ? '<b>Only the highlighted item' + (FOCUS.marks > 1 ? 's need' : ' needs') + ' your attention</b>. Everything else is already recorded. '
+            : 'Please review your family&#39;s details below. Use <b>Edit</b> on any section you want to change, then submit. ') +
+          'This secure link expires on <b>' + esc(res.expires) + '</b>.';
         $('#ubanner').hidden = false;
         $('#next').dataset.update = '1';
         $('#overlay').classList.remove('show');
-        dirty = false; show(1);
+        dirty = false; show(FOCUS.length ? FOCUS[0] : 6);
       }).catch(function () {
         if (tries++ < 2) return setTimeout(go, 3000);
         fail('We could not reach the registration service. Please check your connection and reload this page.');
