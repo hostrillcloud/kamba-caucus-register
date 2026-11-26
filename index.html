@@ -159,6 +159,12 @@ input[type=date].input{appearance:none;-webkit-appearance:none;min-height:50px}
 .link{background:none;border:0;padding:0;color:var(--navy-3);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .consent{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1.5px solid var(--line-2);border-radius:12px;cursor:pointer;margin:18px 0 10px;background:#FFFDF6}
 .consent input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--navy-2)}
+.dupguard{display:flex;gap:12px;align-items:flex-start;background:#FEF3F2;border:1.5px solid #F04438;border-radius:14px;padding:16px 18px;margin:0 0 18px;color:#7A271A;box-shadow:0 8px 24px -14px rgba(180,35,24,.45);animation:in .35s ease}
+.dupguard svg{flex:none;width:22px;height:22px;stroke:#D92D20;margin-top:1px}
+.dupguard .dup-title{font-weight:700;color:#B42318;font-size:15.5px;margin-bottom:4px}
+.dupguard p{margin:0 0 12px;font-size:14px;line-height:1.55}
+.dup-links{display:flex;flex-wrap:wrap;gap:8px}
+.dup-links a{display:inline-flex;align-items:center;min-height:40px;padding:8px 14px;border-radius:999px;background:#fff;border:1.5px solid #FDA29B;color:#B42318;font-weight:600;font-size:14px;text-decoration:none}
 .alert{display:none;background:var(--err-bg);border:1px solid #FECDCA;color:var(--err);border-radius:12px;padding:14px 16px;margin:0 0 18px;font-size:14px}
 .alert.show{display:block}
 .alert ul{margin:6px 0 0;padding-left:18px}
@@ -614,6 +620,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function mount(slot, key, spec) { var el = document.getElementById('slot-' + slot); el.innerHTML = personHTML(key, spec); }
   $$('.seg:not(.chips)').forEach(function (g) { var n = g.querySelectorAll('label').length; if (n === 2 || n === 3) g.classList.add('cols' + n); });
   mount('principal', 'p', SPECS.p);
+  $('#slot-principal').insertAdjacentHTML('afterbegin',
+    '<div class="dupguard" id="dupGuard" hidden role="alert"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>' +
+    '<div><div class="dup-title">Already registered</div><p id="dupText"></p>' +
+    '<div class="dup-links"><a href="mailto:it@kambacaucus.org" target="_top">✉ it@kambacaucus.org</a><a href="tel:+254725069144" target="_top">✆ 0725 069 144</a></div></div></div>');
   mount('spouse', 's', SPECS.s);
   mount('father', 'fa', SPECS.fa);
   mount('mother', 'mo', SPECS.mo);
@@ -772,12 +782,60 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     return true;
   }
   function next() {
-    if (sending) return;
+    if (sending || checking) return;
     if (!validateStep(cur)) return;
     if (cur === 6) return submit();
-    var n = cur + 1; while (!applicable(n)) n++;
-    show(n);
+    var go = function () { var n = cur + 1; while (!applicable(n)) n++; show(n); };
+    if (cur === 1) return guardThen(go);
+    go();
   }
+
+  // ── Duplicate guard: principal National ID / phone / email already registered ──
+  var checking = false, dupCache = { sig: '', used: null };
+  function dupSig() { var p = readPerson('p'); return [TOKEN ? '' : p.docNo, phoneKey(p.phone), p.email].join('|'); }
+  function checkDup(cb) {
+    var p = readPerson('p'), sig = dupSig();
+    if (dupCache.sig === sig && dupCache.used) return cb(dupCache.used);
+    api({ action: 'check', token: TOKEN || undefined, docNo: TOKEN ? '' : p.docNo, phone: p.phone, email: p.email })
+      .then(function (res) { var u = res && res.ok ? res.used : null; if (u) dupCache = { sig: sig, used: u }; cb(u); })
+      .catch(function () { cb(null); });            // unreachable → never block; the server re-checks at submission
+  }
+  function showDupGuard(u) {
+    var g = $('#dupGuard'), list = [];
+    var any = !!(u && (u.docNo || u.phone || u.email));
+    if (u) {
+      if (u.docNo) list.push('National ID number'); if (u.phone) list.push('phone number'); if (u.email) list.push('email address');
+      setErr('p-docNo', u.docNo ? 'Already registered.' : ''); setErr('p-phone', u.phone ? 'Already registered.' : ''); setErr('p-email', u.email ? 'Already registered.' : '');
+    }
+    g.hidden = !any;
+    if (!any) return false;
+    var what = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list[list.length - 1] : list[0];
+    $('#dupText').innerHTML = 'The <b>' + esc(what) + '</b> you entered ' + (list.length > 1 ? 'have' : 'has') +
+      ' already been used to register a principal member. Each principal member can register only once. ' +
+      'To update your family&#39;s details, please contact the <b>Kamba Caucus IT Department</b> to receive a secure update link.';
+    return true;
+  }
+  function guardThen(go) {
+    if (window.__kcNoGuard) return go();               // automated UI tests only; the server still enforces at submission
+    var btn = $('#next'), html = btn.innerHTML;
+    checking = true; btn.disabled = true; btn.innerHTML = '<span class="spin" style="width:18px;height:18px;border-width:2px"></span>Checking…';
+    checkDup(function (u) {
+      checking = false; btn.disabled = false; btn.innerHTML = html;
+      if (showDupGuard(u)) { $('#dupGuard').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+      go();
+    });
+  }
+  var dupTimer = null;
+  document.addEventListener('change', function (e) {
+    if (!/^p-(docNo|phone|email)$/.test(e.target.id)) return;
+    clearTimeout(dupTimer);
+    dupTimer = setTimeout(function () {
+      var p = readPerson('p');
+      var ready = (TOKEN || RX.DOCNO.test(p.docNo)) || RX.PHONE.test(p.phone) || RX.EMAIL.test(p.email);
+      if (!ready) return;
+      checkDup(function (u) { if (u) showDupGuard(u); });
+    }, 250);
+  });
   function back() { var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n)); }
   $('#next').addEventListener('click', next);
   $('#back').addEventListener('click', back);
