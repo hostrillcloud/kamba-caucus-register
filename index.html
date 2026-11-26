@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kamba Caucus · Group Last Expense Cover Data Capture</title>
+<meta name="description" content="Register yourself and your family for the Kamba Caucus Group Last Expense Cover. Takes about 5–10 minutes.">
+<meta name="theme-color" content="#14213D">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hostrillcloud.github.io/kamba-caucus-register/">
+<meta property="og:title" content="Kamba Caucus · Group Last Expense Cover Data Capture">
+<meta property="og:description" content="Register yourself and your family in a few minutes. Confidential & secure.">
+<meta property="og:image" content="https://hostrillcloud.github.io/kamba-caucus-register/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#14213D; --navy-2:#1B2A4A; --navy-3:#24365E;
+  --gold:#C9A227; --gold-2:#B08A1C; --gold-soft:#F6EED6;
+  --ink:#111827; --ink-2:#374151; --muted:#6B7280; --line:#E3E6EC; --line-2:#CBD2DE;
+  --bg:#F5F3EE; --card:#FFFFFF; --err:#B42318; --err-bg:#FEF3F2; --ok:#067647;
+  --r:16px; --r-sm:10px;
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 12px 32px -8px rgba(20,33,61,.12);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;opacity:0}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;color:#fff;padding:44px 22px 104px;
+  background:radial-gradient(1200px 400px at 85% -10%,rgba(201,162,39,.16),transparent 60%),linear-gradient(120deg,#0F1A33 0%,var(--navy-2) 55%,var(--navy-3) 100%)}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(255,255,255,.045) 22px 23px);
+  -webkit-mask-image:linear-gradient(90deg,transparent 45%,#000);mask-image:linear-gradient(90deg,transparent 45%,#000)}
+.hero-in{position:relative;z-index:1;max-width:780px;margin:0 auto}
+.rule{width:56px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:16px}
+.eyebrow{font-size:12px;letter-spacing:.22em;font-weight:700;color:var(--gold);text-transform:uppercase}
+.hero h1{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:clamp(28px,5.2vw,44px);line-height:1.12;margin:8px 0 10px;letter-spacing:-.01em}
+.hero p{margin:0;color:#D3DAE8;font-size:15.5px;max-width:560px}
+.hero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:#B9C3D6}
+.hero .meta span{display:inline-flex;align-items:center;gap:7px}
+.hero .meta svg{width:15px;height:15px;stroke:var(--gold)}
+
+/* Shell */
+.shell{max-width:780px;margin:-72px auto 0;padding:0 16px 120px;position:relative;z-index:2}
+.panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid rgba(20,33,61,.06)}
+
+/* Stepper */
+.stepper{padding:18px 22px;margin-bottom:16px}
+.steps{display:flex;list-style:none;margin:0;padding:0;gap:6px}
+.steps li{flex:1;min-width:0}
+.steps .bar{height:4px;border-radius:4px;background:var(--line);transition:background .35s}
+.steps li.done .bar{background:var(--navy-2)}
+.steps li.current .bar{background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+.steps li.skipped .bar{background:repeating-linear-gradient(90deg,var(--line) 0 4px,transparent 4px 7px)}
+.steps .lbl{display:block;margin-top:8px;font-size:11.5px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps li.current .lbl{color:var(--ink)}
+.step-now{display:none;font-size:13px;color:var(--muted);margin-top:10px}
+.step-now b{color:var(--ink)}
+@media (max-width:620px){.steps .lbl{display:none}.step-now{display:block}}
+
+/* Step card */
+.step{display:none;padding:30px 28px 10px}
+.step.active{display:block;animation:in .38s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.step-head{margin-bottom:22px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-2)}
+.step h2{font-family:"Playfair Display",Georgia,serif;font-size:27px;line-height:1.2;margin:6px 0 6px;color:var(--navy)}
+.step .lead{margin:0;color:var(--muted)}
+
+/* Questions */
+.q{margin:6px 0 22px}
+.q-title{font-weight:600;color:var(--ink);margin:0 0 10px;font-size:15.5px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{cursor:pointer;user-select:none;padding:11px 18px;border:1.5px solid var(--line-2);border-radius:999px;background:#fff;font-weight:500;color:var(--ink-2);transition:all .18s;min-height:46px;display:inline-flex;align-items:center}
+.seg label:hover{border-color:var(--navy-3)}
+.seg input:checked+label{background:var(--navy-2);border-color:var(--navy-2);color:#fff;box-shadow:0 6px 16px -8px rgba(27,42,74,.7)}
+.seg input:focus-visible+label{outline:3px solid rgba(201,162,39,.55);outline-offset:2px}
+.chips label{min-width:52px;justify-content:center;padding:11px 14px}
+
+/* Person card */
+.person{border:1px solid var(--line);border-radius:14px;padding:20px 20px 4px;margin:0 0 18px;background:linear-gradient(#fff,#fff) padding-box;position:relative}
+.person:before{content:"";position:absolute;left:-1px;top:18px;bottom:18px;width:3px;border-radius:3px;background:var(--gold)}
+.person-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.person-head h3{margin:0;font-size:16.5px;color:var(--navy)}
+.tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-2);background:var(--gold-soft);padding:4px 9px;border-radius:999px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.full{grid-column:1/-1}
+@media (max-width:620px){.grid{grid-template-columns:1fr}.step{padding:24px 18px 6px}.person{padding:18px 16px 2px}}
+
+.field{margin-bottom:16px}
+.field>label,.field>.lab{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:7px}
+.opt{font-weight:500;color:var(--muted)}
+.input{width:100%;height:50px;padding:0 14px;border:1.5px solid var(--line-2);border-radius:var(--r-sm);background:#fff;transition:border-color .15s,box-shadow .15s;font-size:16px}
+.input:hover{border-color:#AEB8C8}
+.input:focus{outline:none;border-color:var(--navy-3);box-shadow:0 0 0 4px rgba(36,54,94,.12)}
+input[type=date].input{appearance:none;-webkit-appearance:none;min-height:50px}
+.field .seg label{padding:10px 16px;min-height:46px;font-size:14.5px}
+.fixed{display:inline-flex;align-items:center;gap:9px;min-height:46px;padding:10px 16px;border-radius:999px;background:#EEF1F7;border:1.5px solid #D5DBE7;color:var(--navy-2);font-weight:600;font-size:14.5px}
+.fixed svg{width:18px;height:18px;stroke:var(--gold-2)}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+.err{display:none;font-size:12.5px;color:var(--err);margin-top:6px;font-weight:500}
+.invalid .input{border-color:var(--err);box-shadow:0 0 0 4px rgba(180,35,24,.08)}
+.invalid .seg label{border-color:#F3B5AE}
+.invalid .err{display:block}
+
+.note{display:flex;gap:12px;align-items:flex-start;background:#F7F8FB;border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink-2);font-size:14px;margin-bottom:18px}
+.note svg{flex:none;width:20px;height:20px;stroke:var(--navy-3);margin-top:1px}
+
+/* Actions */
+.actions{position:sticky;bottom:0;z-index:5;display:flex;justify-content:space-between;gap:12px;padding:16px 28px 22px;background:linear-gradient(rgba(255,255,255,0),#fff 28%);border-radius:0 0 var(--r) var(--r)}
+.btn{appearance:none;border:0;cursor:pointer;height:52px;padding:0 26px;border-radius:12px;font-weight:600;font-size:15.5px;display:inline-flex;align-items:center;gap:10px;transition:transform .08s,box-shadow .2s,background .2s}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:3px solid rgba(201,162,39,.6);outline-offset:2px}
+.btn-primary{background:var(--navy-2);color:#fff;box-shadow:0 10px 22px -12px rgba(20,33,61,.9);margin-left:auto}
+.btn-primary:hover{background:var(--navy)}
+.btn-gold{background:linear-gradient(180deg,#D4AF37,var(--gold-2));color:#1A1405;box-shadow:0 10px 22px -12px rgba(176,138,28,.9)}
+.btn-ghost{background:transparent;color:var(--ink-2);border:1.5px solid var(--line-2)}
+.btn-ghost:hover{border-color:var(--navy-3);color:var(--navy)}
+.btn[disabled]{opacity:.6;cursor:not-allowed}
+.btn svg{width:18px;height:18px}
+@media (max-width:620px){.actions{padding:14px 18px 18px}.btn{height:50px;padding:0 20px}}
+
+/* Review */
+.rv{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.rv-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:#F8F9FB;border-bottom:1px solid var(--line)}
+.rv-h b{color:var(--navy);font-size:15px}
+.rv-h .rel{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2)}
+.rv dl{display:grid;grid-template-columns:170px 1fr;margin:0;padding:10px 16px}
+.rv dt{color:var(--muted);font-size:13.5px;padding:5px 0}
+.rv dd{margin:0;padding:5px 0;font-weight:500;font-size:14.5px;word-break:break-word}
+@media (max-width:620px){.rv dl{grid-template-columns:1fr}.rv dt{padding-bottom:0}.rv dd{padding-top:0;margin-bottom:6px}}
+.link{background:none;border:0;padding:0;color:var(--navy-3);font-weight:600;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.consent{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1.5px solid var(--line-2);border-radius:12px;cursor:pointer;margin:18px 0 10px;background:#FFFDF6}
+.consent input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--navy-2)}
+.alert{display:none;background:var(--err-bg);border:1px solid #FECDCA;color:var(--err);border-radius:12px;padding:14px 16px;margin:0 0 18px;font-size:14px}
+.alert.show{display:block}
+.alert ul{margin:6px 0 0;padding-left:18px}
+
+/* Overlay + success */
+.overlay{position:fixed;inset:0;background:rgba(15,26,51,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50}
+.overlay.show{display:flex}
+.overlay .box{background:#fff;border-radius:16px;padding:28px 30px;display:flex;gap:16px;align-items:center;box-shadow:var(--shadow);font-weight:600;color:var(--navy)}
+.spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.done{display:none;text-align:center;padding:48px 28px}
+.done.show{display:block;animation:in .5s ease}
+.seal{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#E5C766,var(--gold-2));box-shadow:0 14px 30px -14px rgba(176,138,28,.9)}
+.seal svg{width:40px;height:40px;stroke:#fff}
+.done h2{font-family:"Playfair Display",Georgia,serif;color:var(--navy);font-size:30px;margin:0 0 8px}
+.done p{color:var(--muted);margin:0 auto;max-width:460px}
+.ref{display:inline-block;margin:22px 0 6px;padding:12px 20px;border-radius:12px;background:var(--gold-soft);color:var(--navy);font-weight:700;letter-spacing:.04em}
+footer{text-align:center;color:var(--muted);font-size:12.5px;padding:8px 16px 28px}
+footer svg{width:13px;height:13px;vertical-align:-2px;stroke:var(--muted)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-in">
+    <div class="rule"></div>
+    <div class="eyebrow">Kamba Caucus</div>
+    <h1>Group Last Expense Cover Data Capture</h1>
+    <p>Member &amp; family registration. Register yourself and your family in a few minutes.</p>
+    <div class="meta">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>About 5–10 minutes</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidential &amp; secure</span>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="panel stepper" id="stepper">
+    <ol class="steps" id="steps"></ol>
+    <div class="step-now" id="stepNow"></div>
+  </div>
+
+  <div class="panel" id="app">
+    <form id="reg" novalidate autocomplete="on">
+      <input type="text" name="website" id="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <section class="step" data-step="1">
+        <div class="step-head">
+          <div class="kicker">Part 1 of 6</div>
+          <h2>Principal Member</h2>
+          <p class="lead">Your details as the registering member. Your ID number links your whole family.</p>
+        </div>
+        <div id="slot-principal"></div>
+      </section>
+
+      <section class="step" data-step="2">
+        <div class="step-head">
+          <div class="kicker">Part 2 of 6</div>
+          <h2>Spouse</h2>
+          <p class="lead">Your husband or wife.</p>
+        </div>
+        <div class="q" data-q="hasSpouse">
+          <p class="q-title" id="q-sp">Do you have a spouse?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-sp">
+            <input type="radio" name="hasSpouse" id="sp-y" value="yes"><label for="sp-y">Yes</label>
+            <input type="radio" name="hasSpouse" id="sp-n" value="no"><label for="sp-n">No</label>
+          </div>
+          <div class="err">Please choose Yes or No.</div>
+        </div>
+        <div id="slot-spouse" hidden></div>
+      </section>
+
+      <section class="step" data-step="3">
+        <div class="step-head">
+          <div class="kicker">Part 3 of 6</div>
+          <h2>Children</h2>
+          <p class="lead">Choose how many children you have and a form opens for each one.</p>
+        </div>
+        <div class="q" data-q="kids">
+          <p class="q-title" id="q-k">How many children do you have?</p>
+          <div class="seg chips" role="radiogroup" aria-labelledby="q-k" id="kidChips"></div>
+          <div class="err">Please choose a number (or None).</div>
+        </div>
+        <div class="note" id="kidNote" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div>For children under 18, choose <b>Birth Certificate</b>. The document number is optional for children.</div></div>
+        <div id="slot-children"></div>
+      </section>
+
+      <section class="step" data-step="4">
+        <div class="step-head">
+          <div class="kicker">Part 4 of 6</div>
+          <h2>Parents</h2>
+          <p class="lead">Your own parents.</p>
+        </div>
+        <div class="q" data-q="parents">
+          <p class="q-title" id="q-p">Are both of your parents alive?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-p">
+            <input type="radio" name="parents" id="pa-b" value="both"><label for="pa-b">Yes, both</label>
+            <input type="radio" name="parents" id="pa-o" value="one"><label for="pa-o">Only one</label>
+            <input type="radio" name="parents" id="pa-n" value="none"><label for="pa-n">Neither</label>
+          </div>
+          <div class="err">Please choose an option.</div>
+        </div>
+        <div class="q" data-q="whichParent" hidden>
+          <p class="q-title" id="q-wp">Which parent is alive?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-wp">
+            <input type="radio" name="whichParent" id="wp-a" value="a"><label for="wp-a">Father</label>
+            <input type="radio" name="whichParent" id="wp-b" value="b"><label for="wp-b">Mother</label>
+          </div>
+          <div class="err">Please choose Father or Mother.</div>
+        </div>
+        <div id="slot-father" hidden></div>
+        <div id="slot-mother" hidden></div>
+      </section>
+
+      <section class="step" data-step="5">
+        <div class="step-head">
+          <div class="kicker">Part 5 of 6</div>
+          <h2>Parents-in-Law</h2>
+          <p class="lead">Your spouse's parents.</p>
+        </div>
+        <div class="q" data-q="inlaws">
+          <p class="q-title" id="q-i">Are both of your parents-in-law alive?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-i">
+            <input type="radio" name="inlaws" id="in-b" value="both"><label for="in-b">Yes, both</label>
+            <input type="radio" name="inlaws" id="in-o" value="one"><label for="in-o">Only one</label>
+            <input type="radio" name="inlaws" id="in-n" value="none"><label for="in-n">Neither</label>
+          </div>
+          <div class="err">Please choose an option.</div>
+        </div>
+        <div class="q" data-q="whichInlaw" hidden>
+          <p class="q-title" id="q-wi">Which parent-in-law is alive?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-wi">
+            <input type="radio" name="whichInlaw" id="wi-a" value="a"><label for="wi-a">Father-in-law</label>
+            <input type="radio" name="whichInlaw" id="wi-b" value="b"><label for="wi-b">Mother-in-law</label>
+          </div>
+          <div class="err">Please choose one.</div>
+        </div>
+        <div id="slot-fil" hidden></div>
+        <div id="slot-mil" hidden></div>
+      </section>
+
+      <section class="step" data-step="6">
+        <div class="step-head">
+          <div class="kicker">Part 6 of 6</div>
+          <h2>Review &amp; Submit</h2>
+          <p class="lead">Please check every detail carefully. Use <b>Edit</b> to make changes.</p>
+        </div>
+        <div class="alert" id="serverErr" role="alert"></div>
+        <div id="review"></div>
+        <label class="consent" data-q="consent">
+          <input type="checkbox" id="consent">
+          <span>I confirm that the information provided is true and complete, and I consent to Kamba Caucus using it to register my family under the Group Last Expense Cover.</span>
+        </label>
+        <div class="q" data-q="consentErr" style="margin-top:0"><div class="err" id="consentErr">Please tick the declaration to continue.</div></div>
+      </section>
+    </form>
+
+    <div class="actions" id="actions">
+      <button type="button" class="btn btn-ghost" id="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>Back</button>
+      <button type="button" class="btn btn-primary" id="next">Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+
+    <div class="done" id="done" aria-live="polite">
+      <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Registration received</h2>
+      <p>Thank you. Your family's details have been securely recorded for the Kamba Caucus Group Last Expense Cover.</p>
+      <div class="ref" id="ref"></div>
+      <p style="font-size:13.5px">Please keep this reference. If any detail changes, contact the Caucus secretariat.</p>
+    </div>
+  </div>
+</main>
+
+<footer><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Your information is confidential and used only to administer the cover. © Kamba Caucus</footer>
+
+<div class="overlay" id="overlay" role="status" aria-live="assertive"><div class="box"><div class="spin"></div>Securing your registration…</div></div>
+
+<script>
+(function () {
+  'use strict';
+  var MAX_KIDS = 8;
+  var API_URL = 'https://script.google.com/macros/s/AKfycbwTE6Pi9CxDxfbKtu54fEKVWNd9IP2LkGcRX156O2h1nhZmdEsFhAAceWI48Cp3nOJg/exec';
+  var STEP_LABELS = ['Principal', 'Spouse', 'Children', 'Parents', 'Parents-in-law', 'Review'];
+  var RX = {
+    NAME: /^[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ .'\-]{1,79}$/,
+    DOCNO: /^[A-Z0-9][A-Z0-9\-\/]{2,24}$/,
+    EMAIL: /^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/,
+    PHONE: /^\+?\d{9,15}$/
+  };
+  var startedAt = Date.now();
+  var sid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+    : 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  var cur = 1, submitted = false, dirty = false, sending = false;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var todayISO = (function () { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); })();
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function radio(name) { var r = $('input[name="' + name + '"]:checked'); return r ? r.value : null; }
+
+  // ── Person specs ──
+  var SPECS = {
+    p:   { title: 'Your details', tag: 'Principal', gender: true, docReq: true, contact: 'required', adult: true },
+    s:   { title: 'Spouse details', tag: 'Spouse', gender: true, docReq: true, contact: 'optional' },
+    fa:  { title: "Father's details", tag: 'Father', gender: false, docReq: true, contact: 'optional' },
+    mo:  { title: "Mother's details", tag: 'Mother', gender: false, docReq: true, contact: 'optional' },
+    fil: { title: "Father-in-law's details", tag: 'Father-in-law', gender: false, docReq: true, contact: 'optional' },
+    mil: { title: "Mother-in-law's details", tag: 'Mother-in-law', gender: false, docReq: true, contact: 'optional' }
+  };
+  function childSpec(i, n) { return { title: 'Child ' + i + ' of ' + n, tag: 'Child', gender: true, docReq: false, contact: 'none', child: true }; }
+  var isChild = function (k) { return /^c\d+$/.test(k); };
+  var ICON_ID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.2"/><path d="M14 10h4M14 14h3"/></svg>';
+
+  function personHTML(key, spec) {
+    var k = key, h = '', child = !!spec.child;
+    h += '<div class="person" data-person="' + k + '"><div class="person-head"><span class="tag">' + esc(spec.tag) + '</span><h3>' + esc(spec.title) + '</h3></div><div class="grid">';
+    var nameHint = child ? 'Enter the names exactly as they appear on the birth certificate or National ID.'
+      : k === 'p' ? 'Enter your names exactly as they appear on your National ID, e.g. Elijah Mutua Muema.'
+      : 'Enter the names exactly as they appear on the National ID.';
+    h += field(k, 'name', 'Full name <span class="opt">(as per ' + (child ? 'birth certificate / National ID' : 'National ID') + ')</span>',
+      '<input class="input" id="' + k + '-name" type="text" maxlength="80" autocomplete="' + (k === 'p' ? 'name' : 'off') + '" placeholder="e.g. Elijah Mutua Muema">', 'full', nameHint);
+    h += field(k, 'dob', 'Date of birth', '<input class="input" id="' + k + '-dob" type="date" min="1900-01-01" max="' + todayISO + '"' + (k === 'p' ? ' autocomplete="bday"' : '') + '>', '');
+    if (spec.gender) h += field(k, 'gender', 'Gender', seg(k + '-gender', ['Male', 'Female']), '');
+    else h += '<div class="field"></div>';
+    if (child) {
+      h += '<div class="field full" data-f="' + k + '-doc"><div class="lab">Identification document</div>' +
+        '<div id="' + k + '-docFixed"><span class="fixed">' + ICON_ID + 'Birth Certificate</span><div class="hint">Children under 18 are registered with a Birth Certificate.</div></div>' +
+        '<div id="' + k + '-docPick" hidden>' + seg(k + '-doc', [['Birth Certificate', 'Birth Certificate'], ['ID', 'National ID']]) +
+        '<div class="hint">This child is 18 or older. Choose one document.</div></div><div class="err"></div></div>';
+    } else {
+      h += '<div class="field full"><div class="lab">Identification document</div><span class="fixed">' + ICON_ID + 'National ID</span></div>';
+    }
+    h += field(k, 'docNo', '<span id="' + k + '-docLbl">' + (child ? 'Birth certificate number' : 'National ID number') + '</span>' + (spec.docReq ? '' : ' <span class="opt">(optional)</span>'),
+      '<input class="input" id="' + k + '-docNo" type="text" maxlength="25" autocomplete="off" autocapitalize="characters" spellcheck="false">', 'full');
+    if (spec.contact !== 'none') {
+      var o = spec.contact === 'optional' ? ' <span class="opt">(optional)</span>' : '';
+      h += field(k, 'email', 'Email address' + o, '<input class="input" id="' + k + '-email" type="email" inputmode="email" maxlength="100" autocomplete="' + (k === 'p' ? 'email' : 'off') + '" placeholder="name@example.com">', '');
+      h += field(k, 'phone', 'Telephone number' + o, '<input class="input" id="' + k + '-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="' + (k === 'p' ? 'tel' : 'off') + '" placeholder="0712 345 678">', '');
+    }
+    return h + '</div></div>';
+  }
+  function field(k, f, label, control, cls, hint) {
+    return '<div class="field ' + (cls || '') + '" data-f="' + k + '-' + f + '"><' + (control.indexOf('class="seg"') > -1 ? 'div class="lab"' : 'label for="' + k + '-' + f + '"') + '>' + label + '</' + (control.indexOf('class="seg"') > -1 ? 'div' : 'label') + '>' +
+      control + (hint ? '<div class="hint">' + hint + '</div>' : '') + '<div class="err"></div></div>';
+  }
+  function seg(name, opts) {
+    return '<div class="seg" role="radiogroup">' + opts.map(function (o, i) {
+      var id = name + '-' + i, val = Array.isArray(o) ? o[0] : o, lab = Array.isArray(o) ? o[1] : o;
+      return '<input type="radio" name="' + name + '" id="' + id + '" value="' + esc(val) + '"><label for="' + id + '">' + esc(lab) + '</label>';
+    }).join('') + '</div>';
+  }
+
+  function childIsAdult(k) {
+    var el = document.getElementById(k + '-dob'), v = el ? el.value : '';
+    return /^\d{4}-\d{2}-\d{2}$/.test(v) && v <= todayISO && ageOn(v) >= 18;
+  }
+  function docFor(k) {
+    if (!isChild(k)) return 'ID';
+    return childIsAdult(k) ? (radio(k + '-doc') || '') : 'Birth Certificate';
+  }
+  function docName(d) { return d === 'ID' ? 'National ID' : d; }
+  function syncChildDoc(k) {
+    if (!isChild(k)) return;
+    var adult = childIsAdult(k), fixed = document.getElementById(k + '-docFixed'), pick = document.getElementById(k + '-docPick');
+    if (!fixed || !pick) return;
+    fixed.hidden = adult; pick.hidden = !adult;
+    if (!adult) $$('input[name="' + k + '-doc"]').forEach(function (r) { r.checked = false; });
+    syncDocLabel(k);
+  }
+
+  function readPerson(k) {
+    var g = function (f) { var el = document.getElementById(k + '-' + f); return el ? el.value.trim() : ''; };
+    return { name: g('name').replace(/\s+/g, ' '), dob: g('dob'), gender: radio(k + '-gender') || '', doc: docFor(k),
+      docNo: g('docNo').toUpperCase().replace(/\s+/g, ''), email: g('email').toLowerCase(), phone: g('phone').replace(/[\s\-()]/g, '') };
+  }
+  function setErr(key, msg) {
+    var box = document.querySelector('[data-f="' + key + '"]') || document.querySelector('[data-q="' + key + '"]');
+    if (!box) return null;
+    var e = box.querySelector('.err');
+    if (msg) { box.classList.add('invalid'); if (e && box.hasAttribute('data-f')) e.textContent = msg; }
+    else box.classList.remove('invalid');
+    var inp = box.querySelector('input');
+    if (inp) inp.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    return msg ? box : null;
+  }
+  function ageOn(iso) {
+    var p = iso.split('-'), t = new Date(), a = t.getFullYear() - +p[0];
+    var md = (t.getMonth() + 1 - +p[1]) || (t.getDate() - +p[2]);
+    return md < 0 ? a - 1 : a;
+  }
+  function validPerson(k, spec) {
+    var v = readPerson(k), first = null;
+    function chk(f, msg) { var b = setErr(k + '-' + f, msg); if (b && !first) first = b; }
+    chk('name', !v.name ? 'Please enter the full name.' : (!RX.NAME.test(v.name) || v.name.split(' ').length < 2) ? 'Enter at least two names, using letters only.' : '');
+    var dobMsg = '';
+    if (!v.dob) dobMsg = 'Please enter the date of birth.';
+    else if (!/^\d{4}-\d{2}-\d{2}$/.test(v.dob) || v.dob < '1900-01-01' || v.dob > todayISO) dobMsg = 'Please enter a valid date between 1900 and today.';
+    else if (spec.adult && ageOn(v.dob) < 18) dobMsg = 'The principal member must be at least 18 years old.';
+    chk('dob', dobMsg);
+    if (spec.gender) chk('gender', v.gender ? '' : 'Please select gender.');
+    chk('doc', v.doc ? '' : 'Please choose Birth Certificate or National ID.');
+    chk('docNo', !v.docNo ? (spec.docReq ? 'Please enter the document number.' : '') : RX.DOCNO.test(v.docNo) ? '' : 'Use letters, numbers, "-" or "/" only (3–25 characters).');
+    if (spec.contact !== 'none') {
+      chk('email', !v.email ? (spec.contact === 'required' ? 'Please enter your email address.' : '') : RX.EMAIL.test(v.email) ? '' : 'Please enter a valid email address.');
+      chk('phone', !v.phone ? (spec.contact === 'required' ? 'Please enter your telephone number.' : '') : RX.PHONE.test(v.phone) ? '' : 'Enter a valid number, e.g. 0712345678 or +254712345678.');
+    }
+    return first;
+  }
+
+  // ── Mount static people ──
+  function mount(slot, key, spec) { var el = document.getElementById('slot-' + slot); el.innerHTML = personHTML(key, spec); }
+  mount('principal', 'p', SPECS.p);
+  mount('spouse', 's', SPECS.s);
+  mount('father', 'fa', SPECS.fa);
+  mount('mother', 'mo', SPECS.mo);
+  mount('fil', 'fil', SPECS.fil);
+  mount('mil', 'mil', SPECS.mil);
+
+  // ── Children ──
+  var chipHTML = '';
+  for (var n = 0; n <= MAX_KIDS; n++) chipHTML += '<input type="radio" name="kids" id="k' + n + '" value="' + n + '"><label for="k' + n + '">' + (n === 0 ? 'None' : n) + '</label>';
+  $('#kidChips').innerHTML = chipHTML;
+  var kidCache = {};
+  function renderKids(n) {
+    var slot = $('#slot-children');
+    $$('.person', slot).forEach(function (el) { var k = el.getAttribute('data-person'); kidCache[k] = snapshot(el); });
+    var h = '';
+    for (var i = 1; i <= n; i++) h += personHTML('c' + i, childSpec(i, n));
+    slot.innerHTML = h;
+    for (var j = 1; j <= n; j++) restore(document.querySelector('[data-person="c' + j + '"]'), kidCache['c' + j]);
+    $('#kidNote').hidden = n === 0;
+  }
+  function snapshot(el) {
+    var o = {};
+    $$('input', el).forEach(function (i) { if (i.type === 'radio') { if (i.checked) o[i.name] = i.value; } else o[i.id] = i.value; });
+    return o;
+  }
+  function restore(el, o) {
+    if (!el || !o) return;
+    $$('input', el).forEach(function (i) { if (i.type === 'radio') i.checked = o[i.name] === i.value; else if (o[i.id] != null) i.value = o[i.id]; });
+    var k = el.getAttribute('data-person');
+    syncChildDoc(k);
+    if (o[k + '-doc'] && childIsAdult(k)) $$('input[name="' + k + '-doc"]').forEach(function (r) { r.checked = r.value === o[k + '-doc']; });
+    syncDocLabel(k);
+  }
+
+  // ── Dynamic visibility ──
+  function syncDocLabel(k) {
+    var lbl = document.getElementById(k + '-docLbl'); if (!lbl) return;
+    var d = docFor(k);
+    lbl.textContent = d === 'Birth Certificate' ? 'Birth certificate number' : d === 'ID' ? 'National ID number' : 'Document number';
+  }
+  function sync() {
+    var sp = radio('hasSpouse');
+    $('#slot-spouse').hidden = sp !== 'yes';
+    var pa = radio('parents'), wp = radio('whichParent');
+    $('[data-q="whichParent"]').hidden = pa !== 'one';
+    $('#slot-father').hidden = !(pa === 'both' || (pa === 'one' && wp === 'a'));
+    $('#slot-mother').hidden = !(pa === 'both' || (pa === 'one' && wp === 'b'));
+    var il = radio('inlaws'), wi = radio('whichInlaw');
+    $('[data-q="whichInlaw"]').hidden = il !== 'one';
+    $('#slot-fil').hidden = !(il === 'both' || (il === 'one' && wi === 'a'));
+    $('#slot-mil').hidden = !(il === 'both' || (il === 'one' && wi === 'b'));
+    renderStepper();
+  }
+
+  document.addEventListener('change', function (e) {
+    var t = e.target; dirty = true;
+    if (t.name === 'kids') { renderKids(+t.value); setErr('kids', ''); }
+    if (/-doc$/.test(t.name)) syncDocLabel(t.name.replace(/-doc$/, ''));
+    if (/^c\d+-dob$/.test(t.id)) syncChildDoc(t.id.split('-')[0]);
+    if (t.name && document.querySelector('[data-q="' + t.name + '"]')) setErr(t.name, '');
+    var f = t.closest && t.closest('.field'); if (f) f.classList.remove('invalid');
+    if (t.id === 'consent') { $('[data-q="consentErr"]').classList.remove('invalid'); }
+    sync();
+  });
+  document.addEventListener('input', function (e) {
+    dirty = true; if (/^c\d+-dob$/.test(e.target.id)) syncChildDoc(e.target.id.split('-')[0]);
+    var f = e.target.closest && e.target.closest('.field');
+    if (f && f.classList.contains('invalid')) f.classList.remove('invalid');
+  });
+
+  // ── Steps ──
+  function applicable(n) { return n !== 5 || radio('hasSpouse') !== 'no'; }
+  function renderStepper() {
+    var h = '';
+    for (var i = 1; i <= 6; i++) {
+      var cls = i === cur ? 'current' : !applicable(i) ? 'skipped' : i < cur ? 'done' : '';
+      h += '<li class="' + cls + '"' + (i === cur ? ' aria-current="step"' : '') + '><div class="bar"></div><span class="lbl">' + STEP_LABELS[i - 1] + (applicable(i) ? '' : ' (n/a)') + '</span></li>';
+    }
+    $('#steps').innerHTML = h;
+    var total = [1, 2, 3, 4, 5, 6].filter(applicable).length;
+    var pos = [1, 2, 3, 4, 5, 6].filter(function (i) { return applicable(i) && i <= cur; }).length;
+    $('#stepNow').innerHTML = 'Step <b>' + pos + '</b> of ' + total + ' · <b>' + STEP_LABELS[cur - 1] + '</b>';
+  }
+  function show(n) {
+    cur = n;
+    $$('.step').forEach(function (s) { s.classList.toggle('active', +s.getAttribute('data-step') === n); });
+    $('#back').style.visibility = n === 1 ? 'hidden' : 'visible';
+    var nx = $('#next');
+    if (n === 6) { buildReview(); nx.className = 'btn btn-gold'; nx.innerHTML = 'Submit registration<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
+    else { nx.className = 'btn btn-primary'; nx.innerHTML = 'Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'; }
+    renderStepper();
+    var top = $('#stepper').getBoundingClientRect().top + window.pageYOffset - 12;
+    if (window.pageYOffset > top) window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+  function validateStep(n) {
+    var first = null, b;
+    function q(name, ok) { b = setErr(name, ok ? '' : 'x'); if (b && !first) first = b; }
+    function per(k, spec) { b = validPerson(k, spec); if (b && !first) first = b; }
+    if (n === 1) per('p', SPECS.p);
+    if (n === 2) { q('hasSpouse', radio('hasSpouse')); if (radio('hasSpouse') === 'yes') per('s', SPECS.s); }
+    if (n === 3) {
+      var k = radio('kids'); q('kids', k !== null);
+      for (var i = 1; i <= +(k || 0); i++) per('c' + i, childSpec(i, +k));
+    }
+    if (n === 4 || n === 5) {
+      var g = n === 4 ? 'parents' : 'inlaws', w = n === 4 ? 'whichParent' : 'whichInlaw';
+      var a = n === 4 ? 'fa' : 'fil', bb = n === 4 ? 'mo' : 'mil';
+      var v = radio(g); q(g, v);
+      if (v === 'one') q(w, radio(w));
+      if (v === 'both' || (v === 'one' && radio(w) === 'a')) per(a, SPECS[a]);
+      if (v === 'both' || (v === 'one' && radio(w) === 'b')) per(bb, SPECS[bb]);
+    }
+    if (n === 6) {
+      var dup = duplicateIds();
+      if (dup) { showServerErrors(['The identification number ' + dup + ' is entered for more than one person. Please correct it.']); first = $('#serverErr'); }
+      else if (!$('#consent').checked) { $('[data-q="consentErr"]').classList.add('invalid'); first = $('.consent'); }
+    }
+    if (first) {
+      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var f = first.querySelector('input:not([type=radio])'); if (f) setTimeout(function () { f.focus({ preventScroll: true }); }, 350);
+      return false;
+    }
+    return true;
+  }
+  function next() {
+    if (sending) return;
+    if (!validateStep(cur)) return;
+    if (cur === 6) return submit();
+    var n = cur + 1; while (!applicable(n)) n++;
+    show(n);
+  }
+  function back() { var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n)); }
+  $('#next').addEventListener('click', next);
+  $('#back').addEventListener('click', back);
+  $('#reg').addEventListener('submit', function (e) { e.preventDefault(); });
+  $('#reg').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') { e.preventDefault(); next(); }
+  });
+
+  // ── Payload + review ──
+  function payload() {
+    var hasSpouse = radio('hasSpouse') === 'yes', kids = +(radio('kids') || 0), out = {
+      sid: sid, startedAt: startedAt, website: $('#website').value,
+      principal: readPerson('p'), hasSpouse: hasSpouse, spouse: hasSpouse ? readPerson('s') : null, children: [],
+      parents: radio('parents'), whichParent: radio('whichParent'),
+      father: null, mother: null, inlaws: null, whichInlaw: null, fil: null, mil: null,
+      consent: $('#consent').checked
+    };
+    for (var i = 1; i <= kids; i++) out.children.push(readPerson('c' + i));
+    if (!$('#slot-father').hidden) out.father = readPerson('fa');
+    if (!$('#slot-mother').hidden) out.mother = readPerson('mo');
+    if (hasSpouse) {
+      out.inlaws = radio('inlaws'); out.whichInlaw = radio('whichInlaw');
+      if (!$('#slot-fil').hidden) out.fil = readPerson('fil');
+      if (!$('#slot-mil').hidden) out.mil = readPerson('mil');
+    }
+    return out;
+  }
+  function people() {
+    var p = payload(), list = [];
+    function add(x, rel, step, gender) { list.push({ x: x, rel: rel, step: step, gender: gender || x.gender }); }
+    add(p.principal, 'Principal', 1);
+    if (p.spouse) add(p.spouse, p.spouse.gender === 'Female' ? 'Wife' : 'Husband', 2);
+    p.children.forEach(function (c) { add(c, c.gender === 'Female' ? 'Daughter' : 'Son', 3); });
+    if (p.father) add(p.father, 'Father', 4, 'Male');
+    if (p.mother) add(p.mother, 'Mother', 4, 'Female');
+    if (p.fil) add(p.fil, 'Father-in-law', 5, 'Male');
+    if (p.mil) add(p.mil, 'Mother-in-law', 5, 'Female');
+    return list;
+  }
+  function duplicateIds() {
+    var seen = {}, dup = null;
+    people().forEach(function (o) { var d = o.x.docNo; if (!d) return; if (seen[d]) dup = d; seen[d] = 1; });
+    return dup;
+  }
+  function fmtDate(iso) { var p = (iso || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : ''; }
+  function properName(s) { return (s === s.toLowerCase() || s === s.toUpperCase()) ? s.toLowerCase().replace(/(^|[\s'\-])(\S)/g, function (m, a, b) { return a + b.toUpperCase(); }) : s; }
+  function buildReview() {
+    var h = '';
+    people().forEach(function (o) {
+      var x = o.x;
+      h += '<div class="rv"><div class="rv-h"><div><span class="rel">' + esc(o.rel) + '</span><br><b>' + esc(properName(x.name)) + '</b></div><button type="button" class="link" data-edit="' + o.step + '">Edit</button></div><dl>' +
+        '<dt>Date of birth</dt><dd>' + esc(fmtDate(x.dob)) + '</dd>' +
+        '<dt>Gender</dt><dd>' + esc(o.gender) + '</dd>' +
+        '<dt>Document</dt><dd>' + esc(docName(x.doc)) + '</dd>' +
+        '<dt>' + esc(docName(x.doc) || 'Document') + ' number</dt><dd>' + (x.docNo ? esc(x.docNo) : '<span class="opt">Not provided</span>') + '</dd>' +
+        (x.email ? '<dt>Email</dt><dd>' + esc(x.email) + '</dd>' : '') +
+        (x.phone ? '<dt>Telephone</dt><dd>' + esc(x.phone) + '</dd>' : '') +
+        '</dl></div>';
+    });
+    $('#review').innerHTML = h;
+    $('#serverErr').classList.remove('show');
+  }
+  $('#review').addEventListener('click', function (e) { var b = e.target.closest('[data-edit]'); if (b) show(+b.getAttribute('data-edit')); });
+  function showServerErrors(errs) {
+    var box = $('#serverErr');
+    box.innerHTML = '<b>Please correct the following:</b><ul>' + errs.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>';
+    box.classList.add('show');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ── Submit ──
+  function submit() {
+    if (sending) return;
+    sending = true;
+    var btn = $('#next'); btn.disabled = true; $('#back').disabled = true;
+    $('#overlay').classList.add('show');
+    var done = function () { sending = false; btn.disabled = false; $('#back').disabled = false; $('#overlay').classList.remove('show'); };
+    var onOk = function (res) {
+      done();
+      if (res && res.ok) {
+        submitted = true;
+        $('#reg').hidden = true; $('#actions').hidden = true; $('#stepper').hidden = true;
+        $('#ref').textContent = 'Family reference No. ' + res.ref;
+        $('#done').classList.add('show');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showServerErrors((res && res.errors) || ['Something went wrong. Please try again.']);
+      }
+    };
+    var onFail = function () { done(); showServerErrors(['We could not reach the registration service. Please check your connection and press Submit again. Your details are still here.']); };
+    if (window.google && google.script && google.script.run) {
+      google.script.run.withSuccessHandler(onOk).withFailureHandler(onFail).submitRegistration(payload());
+    } else {
+      // Public page: post without cookies so multiple Google sign-ins on the phone cannot interfere.
+      var ctl = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 60000);
+      fetch(API_URL, { method: 'POST', body: JSON.stringify(payload()), credentials: 'omit', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, signal: ctl ? ctl.signal : undefined })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (res) { clearTimeout(timer); onOk(res); })
+        .catch(function () { clearTimeout(timer); onFail(); });
+    }
+  }
+
+  window.addEventListener('beforeunload', function (e) { if (dirty && !submitted) { e.preventDefault(); e.returnValue = ''; } });
+  window.__kc = { payload: payload, show: show, next: next, people: people };
+  sync(); show(1);
+})();
+</script>
+</body>
+</html>
