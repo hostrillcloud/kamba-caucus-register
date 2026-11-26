@@ -438,8 +438,6 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   }
   // Adult-child section: confirmation, school question, school details or Sub-Principal details.
   function adultHTML(k) {
-    var y = new Date().getFullYear(), years = '<option value="">Select year</option>';
-    for (var i = 0; i <= 8; i++) years += '<option value="' + (y + i) + '">' + (y + i) + '</option>';
     return '<div class="full adult" id="' + k + '-adult" hidden>' +
       '<div class="field" data-f="' + k + '-confirm18"><div class="notice warn">' + ICON_WARN +
         '<div><p><b>This child is 18 years or above.</b></p><label class="check"><input type="checkbox" id="' + k + '-confirm18"><span>I confirm my child is 18 years or above</span></label></div></div><div class="err"></div></div>' +
@@ -447,12 +445,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         seg(k + '-inSchool', [['yes', 'Yes, in school'], ['no', 'No, not in school']]) + '<div class="err"></div></div>' +
       '<div id="' + k + '-schoolBox" hidden>' +
         '<div class="notice info" style="margin-bottom:16px">' + ICON_INFO + '<div>You will be contacted to provide proof of schooling.</div></div>' +
-        '<div class="grid">' +
-        field(k, 'inst', 'School / institution', '<input class="input" id="' + k + '-inst" type="text" maxlength="120" autocomplete="off" placeholder="e.g. University of Nairobi">', 'full') +
-        field(k, 'level', 'Level of study', seg(k + '-level', ['Secondary', 'College', 'University', 'Other']), 'full') +
-        field(k, 'course', 'Course <span class="opt">(optional)</span>', '<input class="input" id="' + k + '-course" type="text" maxlength="100" autocomplete="off" placeholder="e.g. Bachelor of Commerce">', '') +
-        field(k, 'done', 'Expected completion year', '<select class="input" id="' + k + '-done">' + years + '</select>', '') +
-        '</div></div>' +
+        '</div>' +
       '<div id="' + k + '-subBox" hidden>' +
         '<div class="notice sub" style="margin-bottom:16px">' + ICON_INFO + '<div id="' + k + '-subMsg"></div></div>' +
         '<div class="grid">' +
@@ -535,7 +528,6 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         x.confirm18 = !!(document.getElementById(k + '-confirm18') || {}).checked;
         x.inSchool = childAge(k) > SCHOOL_MAX ? 'no' : radio(k + '-inSchool');
       }
-      if (m === 'school') x.school = { institution: g('inst').replace(/\s+/g, ' '), level: radio(k + '-level') || '', course: g('course').replace(/\s+/g, ' '), completion: g('done') };
     }
     var agree = document.getElementById(k + '-agree');
     if (agree && !document.getElementById(k + '-75').hidden) x.agree75 = agree.checked;
@@ -577,13 +569,6 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       if (m !== 'minor') {
         chk('confirm18', v.confirm18 ? '' : 'Please tick to confirm this child is 18 years or above.');
         if (a <= SCHOOL_MAX) chk('inSchool', v.inSchool ? '' : 'Please say whether your child is still in school.');
-      }
-      if (m === 'school') {
-        var s = v.school;
-        chk('inst', RX.TEXT.test(s.institution) ? '' : 'Please enter the name of the school / institution.');
-        chk('level', s.level ? '' : 'Please select the level of study.');
-        chk('course', !s.course || RX.TEXT.test(s.course) ? '' : 'Use letters, numbers and basic punctuation only.');
-        chk('done', s.completion ? '' : 'Please select the expected completion year.');
       }
       if (m === 'sub') {
         var pr = readPerson('p');
@@ -833,8 +818,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         '<dt>' + esc(docName(x.doc) || 'Document') + ' number</dt><dd>' + (x.docNo ? esc(x.docNo) : '<span class="opt">Not provided</span>') + '</dd>' +
         (x.email ? '<dt>Email</dt><dd>' + esc(x.email) + '</dd>' : '') +
         (x.phone ? '<dt>Telephone</dt><dd>' + esc(x.phone) + '</dd>' : '') +
-        (o.mode === 'school' ? '<dt>School</dt><dd>' + esc(x.school.institution) + ' · ' + esc(x.school.level) + (x.school.course ? ' · ' + esc(x.school.course) : '') +
-          ' · completes ' + esc(x.school.completion) + '</dd><div class="flag">You will be contacted to provide proof of schooling.</div>' : '') +
+        (o.mode === 'school' ? '<div class="flag">In school: you will be contacted to provide proof of schooling.</div>' : '') +
         (o.mode === 'sub' ? '<div class="flag">Sub-Principal member: an additional amount applies, part of which Kamba Caucus will pay. Details shall be communicated.</div>' : '') +
         (x.agree75 ? '<div class="flag">Aged 75+: covered under the Kamba Caucus internal terms. ✓ Agreed</div>' : '') +
         '</dl></div>';
@@ -924,7 +908,6 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       setCheck(k + '-confirm18', x.confirm18); setRadio(k + '-inSchool', x.inSchool);
       syncChild(k);
       if (childMode(k) === 'school' || childMode(k) === 'undecided') setRadio(k + '-doc', x.doc);
-      if (x.school) { setVal(k + '-inst', x.school.institution); setRadio(k + '-level', x.school.level); setVal(k + '-course', x.school.course); setVal(k + '-done', x.school.completion); }
       syncChild(k);
     }
     if (/^(fa|mo|fil|mil)$/.test(k)) syncElder(k);
