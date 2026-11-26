@@ -671,7 +671,7 @@ footer svg{width:13px;height:13px;vertical-align:-2px;stroke:var(--muted)}
       if (res && res.ok) {
         submitted = true;
         $('#reg').hidden = true; $('#actions').hidden = true; $('#stepper').hidden = true;
-        $('#ref').textContent = 'Family reference No. ' + res.ref;
+        $('#ref').textContent = 'Submission Reference No. ' + res.ref;
         $('#done').classList.add('show');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
