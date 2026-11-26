@@ -408,10 +408,9 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   var ICON_ID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.2"/><path d="M14 10h4M14 14h3"/></svg>';
   var ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 10v4M12 17h.01"/></svg>';
   var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>';
-  var V2 = 2, SCHOOL_MAX = 25, ELDER = 75;
+  var V2 = 2, ELDER = 75;
   var ELDER_WORDS = { fa: ['father', 'He'], mo: ['mother', 'She'], fil: ['father-in-law', 'He'], mil: ['mother-in-law', 'She'] };
-  var SUB_MSG = 'Your child will be registered as a <b>Sub-Principal member</b> under you. An additional amount applies, part of which Kamba Caucus will pay for you. Details shall be communicated.';
-  var SUB_MSG_25 = 'As your child is over 25, they will be registered as a <b>Sub-Principal member</b> under you. An additional amount applies, part of which Kamba Caucus will pay for you. Details shall be communicated.';
+  var SUB_MSG = 'Your child will be registered as a <b>Sub-Principal member</b> under you. You will be contacted for further information. An additional premium is required, part of which will be paid by Kamba Caucus as per the organisation&#39;s terms and conditions.';
 
   function personHTML(key, spec) {
     var k = key, h = '', child = !!spec.child;
@@ -454,10 +453,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     return '<div class="full adult" id="' + k + '-adult" hidden>' +
       '<div class="field" data-f="' + k + '-confirm18"><div class="notice warn">' + ICON_WARN +
         '<div><p><b>This child is 18 years or above.</b></p><label class="check"><input type="checkbox" id="' + k + '-confirm18"><span>I confirm my child is 18 years or above</span></label></div></div><div class="err"></div></div>' +
-      '<div class="field" data-f="' + k + '-inSchool" id="' + k + '-schoolQ"><div class="lab">Is your child still in school?</div>' +
+      '<div class="field" data-f="' + k + '-inSchool" id="' + k + '-schoolQ"><div class="lab">Is this child still in school?</div>' +
         seg(k + '-inSchool', [['yes', 'Yes, in school'], ['no', 'No, not in school']]) + '<div class="err"></div></div>' +
       '<div id="' + k + '-schoolBox" hidden>' +
-        '<div class="notice info" style="margin-bottom:16px">' + ICON_INFO + '<div>You will be contacted to provide proof of schooling.</div></div>' +
+        '<div class="notice info" style="margin-bottom:16px">' + ICON_INFO + '<div>This category is required to provide proof of education. Kamba Caucus will contact you for further details.</div></div>' +
         '</div>' +
       '<div id="' + k + '-subBox" hidden>' +
         '<div class="notice sub" style="margin-bottom:16px">' + ICON_INFO + '<div id="' + k + '-subMsg"></div></div>' +
@@ -487,7 +486,6 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function childMode(k) {
     var a = childAge(k);
     if (a < 18) return 'minor';
-    if (a > SCHOOL_MAX) return 'sub';
     var s = radio(k + '-inSchool');
     return s === 'yes' ? 'school' : s === 'no' ? 'sub' : 'undecided';
   }
@@ -503,10 +501,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     if (!el('docFixed')) return;
     var m = childMode(k), adult = m !== 'minor', a = childAge(k);
     el('adult').hidden = !adult;
-    el('schoolQ').hidden = !adult || a > SCHOOL_MAX;
+    el('schoolQ').hidden = !adult;
     el('schoolBox').hidden = m !== 'school';
     el('subBox').hidden = m !== 'sub';
-    el('subMsg').innerHTML = a > SCHOOL_MAX ? SUB_MSG_25 : SUB_MSG;
+    el('subMsg').innerHTML = SUB_MSG;
     // Document: minor → Birth Certificate (fixed); Sub-Principal → National ID (fixed); in school → choose one.
     var fixed = m === 'minor' || m === 'sub';
     el('docFixed').hidden = !fixed; el('docPick').hidden = fixed;
@@ -539,7 +537,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       if (m !== 'sub') { x.email = ''; x.phone = ''; }
       if (m !== 'minor') {
         x.confirm18 = !!(document.getElementById(k + '-confirm18') || {}).checked;
-        x.inSchool = childAge(k) > SCHOOL_MAX ? 'no' : radio(k + '-inSchool');
+        x.inSchool = radio(k + '-inSchool');
       }
     }
     var agree = document.getElementById(k + '-agree');
@@ -581,7 +579,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       var m = childMode(k), a = childAge(k);
       if (m !== 'minor') {
         chk('confirm18', v.confirm18 ? '' : 'Please tick to confirm this child is 18 years or above.');
-        if (a <= SCHOOL_MAX) chk('inSchool', v.inSchool ? '' : 'Please say whether your child is still in school.');
+        chk('inSchool', v.inSchool ? '' : 'Please say whether this child is still in school.');
       }
       if (m === 'sub') {
         var pr = readPerson('p');
@@ -831,8 +829,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         '<dt>' + esc(docName(x.doc) || 'Document') + ' number</dt><dd>' + (x.docNo ? esc(x.docNo) : '<span class="opt">Not provided</span>') + '</dd>' +
         (x.email ? '<dt>Email</dt><dd>' + esc(x.email) + '</dd>' : '') +
         (x.phone ? '<dt>Telephone</dt><dd>' + esc(x.phone) + '</dd>' : '') +
-        (o.mode === 'school' ? '<div class="flag">In school: you will be contacted to provide proof of schooling.</div>' : '') +
-        (o.mode === 'sub' ? '<div class="flag">Sub-Principal member: an additional amount applies, part of which Kamba Caucus will pay. Details shall be communicated.</div>' : '') +
+        (o.mode === 'school' ? '<div class="flag">In school: This category is required to provide proof of education. Kamba Caucus will contact you for further details.</div>' : '') +
+        (o.mode === 'sub' ? '<div class="flag">Sub-Principal member: an additional premium is required, part of which will be paid by Kamba Caucus as per the organisation&#39;s terms and conditions. You will be contacted for further information.</div>' : '') +
         (x.agree75 ? '<div class="flag">Aged 75+: covered under the Kamba Caucus internal terms. ✓ Agreed</div>' : '') +
         '</dl></div>';
     });
