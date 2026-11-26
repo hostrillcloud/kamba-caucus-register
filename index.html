@@ -60,7 +60,19 @@ button,input,select{font:inherit;color:inherit}
 .panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid rgba(20,33,61,.06)}
 
 /* Stepper */
-.stepper{padding:18px 22px;margin-bottom:16px}
+.stepper{padding:14px 22px 18px;margin-bottom:16px}
+.stepper-top{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-bottom:10px;min-height:30px}
+.saved-note{display:inline-flex;align-items:center;gap:6px;margin-right:auto;font-size:12.5px;color:#2E7D4F;font-weight:600}
+.saved-note svg{width:15px;height:15px;stroke:#2E7D4F}
+.exit{appearance:none;display:inline-flex;align-items:center;gap:6px;background:none;border:1.5px solid var(--line-2);border-radius:999px;padding:5px 12px 5px 9px;font:inherit;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.exit:hover{border-color:var(--navy-3);color:var(--navy)}
+.exit svg{width:14px;height:14px;stroke:currentColor}
+.resume{display:flex;gap:12px;align-items:flex-start;background:#EAF7EE;border:1.5px solid #9BD3AE;border-radius:14px;padding:16px 18px;margin:0 0 22px;color:#1F5133}
+.resume svg{flex:none;width:22px;height:22px;stroke:#2E7D4F;margin-top:2px}
+.resume-title{font-weight:700;font-size:15.5px;color:#14532D}
+.resume p{margin:4px 0 12px;font-size:13.5px}
+.resume-actions{display:flex;flex-wrap:wrap;gap:10px}
+.resume-actions .btn{height:44px;padding:0 18px;font-size:14.5px;margin-left:0}
 .steps{display:flex;list-style:none;margin:0;padding:0;gap:6px}
 .steps li{flex:1;min-width:0}
 .steps .bar{height:4px;border-radius:4px;background:var(--line);transition:background .35s}
@@ -251,6 +263,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
 <main class="shell">
   <div class="panel stepper" id="stepper">
+    <div class="stepper-top"><span class="saved-note" id="savedNote" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Progress saved on this device</span>
+      <button type="button" class="exit" id="exitBtn" aria-label="Exit to the start page"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M6 6l12 12M18 6L6 18"/></svg>Exit</button></div>
     <ol class="steps" id="steps"></ol>
     <div class="step-now" id="stepNow"></div>
   </div>
@@ -264,6 +278,17 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     </div>
     <!-- Landing: choose what to do -->
     <section class="landing" id="landing" hidden>
+      <div class="resume" id="resumeCard" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+        <div>
+          <div class="resume-title">Welcome back. Your unfinished registration is saved.</div>
+          <p id="resumeText"></p>
+          <div class="resume-actions">
+            <button type="button" class="btn btn-primary" id="resumeGo">Continue where I left off</button>
+            <button type="button" class="btn btn-ghost" id="resumeNew">Start again</button>
+          </div>
+        </div>
+      </div>
       <div class="kicker">Welcome</div>
       <h2>What would you like to do?</h2>
       <p class="lead">Choose an option below.</p>
@@ -785,7 +810,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function show(n) {
     cur = n;
     $$('.step').forEach(function (s) { s.classList.toggle('active', +s.getAttribute('data-step') === n); });
-    $('#back').style.visibility = n === 1 ? 'hidden' : 'visible';
+    $('#back').style.visibility = (n === 1 && TOKEN) ? 'hidden' : 'visible';
+    queueSave();                                            // remember which part the member is on
     var nx = $('#next');
     if (n === 6) { buildReview(); nx.className = 'btn btn-gold'; nx.innerHTML = 'Submit registration<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
     else { nx.className = 'btn btn-primary'; nx.innerHTML = 'Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'; }
@@ -901,7 +927,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       checkDup(function (u) { if (u) showDupGuard(u); });
     }, 250);
   });
-  function back() { var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n)); }
+  function back() {
+    if (cur === 1) { if (!TOKEN) exitToStart(); return; }      // Back on Part 1 → start page (progress is saved)
+    var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n));
+  }
   $('#next').addEventListener('click', next);
   $('#back').addEventListener('click', back);
   $('#reg').addEventListener('submit', function (e) { e.preventDefault(); });
@@ -989,6 +1018,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       done();
       if (res && res.ok) {
         submitted = true;
+        clearDraft();                                       // saved progress removed once safely submitted
         $('#reg').hidden = true; $('#actions').hidden = true; $('#stepper').hidden = true; $('#ubanner').hidden = true;
         if (res.updated) {
           $('#doneTitle').textContent = 'Registration updated';
@@ -1102,7 +1132,75 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     })();
   }
 
-  window.addEventListener('beforeunload', function (e) { if (dirty && !submitted) { e.preventDefault(); e.returnValue = ''; } });
+  // Progress is saved automatically, so no "leave page?" warning is needed for registrations.
+  window.addEventListener('beforeunload', function (e) { if (TOKEN && dirty && !submitted) { e.preventDefault(); e.returnValue = ''; } });
+
+  // ── Draft: progress saved on THIS device only (never sent anywhere); cleared on submit, "Start again", or after 7 days ──
+  var DRAFT_KEY = 'kc_registration_draft_v1', DRAFT_DAYS = 7, draftTimer = null;
+  function store() { try { return window.localStorage; } catch (e) { return null; } }
+  function readDraft() {
+    var s = store(); if (!s) return null;
+    try {
+      var d = JSON.parse(s.getItem(DRAFT_KEY) || 'null');
+      if (!d || !d.t || Date.now() - d.t > DRAFT_DAYS * 864e5) { s.removeItem(DRAFT_KEY); return null; }
+      return d;
+    } catch (e) { s.removeItem(DRAFT_KEY); return null; }
+  }
+  function clearDraft() { var s = store(); if (s) try { s.removeItem(DRAFT_KEY); } catch (e) {} }
+  function saveDraft() {
+    if (TOKEN || submitted || $('#reg').hidden) return;
+    var s = store(); if (!s) return;
+    var f = {};
+    $$('#reg input, #reg select').forEach(function (i) {
+      if (!i.id && !i.name) return;
+      if (i.id === 'website' || i.id === 'consent') return;
+      if (i.type === 'radio') { if (i.checked) f['r:' + i.name] = i.value; }
+      else if (i.type === 'checkbox') { if (i.checked) f['c:' + i.id] = true; }
+      else if (i.value) f['v:' + i.id] = i.value;
+    });
+    if (Object.keys(f).length < 2) return;                 // nothing meaningful typed yet
+    try {
+      var old = readDraft();
+      s.setItem(DRAFT_KEY, JSON.stringify({ t: Date.now(), started: (old && old.started) || Date.now(), step: cur, f: f }));
+      $('#savedNote').hidden = false;
+    } catch (e) { /* storage full or blocked: carry on without drafts */ }
+  }
+  function queueSave() { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 400); }
+  document.addEventListener('input', queueSave);
+  document.addEventListener('change', queueSave);
+  function applyDraft(d) {
+    var f = d.f || {};
+    ['hasSpouse', 'parents', 'whichParent', 'inlaws', 'whichInlaw'].forEach(function (n) { if (f['r:' + n]) setRadio(n, f['r:' + n]); });
+    if (f['r:kids'] != null) { setRadio('kids', f['r:kids']); renderKids(+f['r:kids']); }
+    var setAll = function () {
+      Object.keys(f).forEach(function (k) {
+        var v = f[k], key = k.slice(2);
+        if (k.indexOf('v:') === 0) { var el = document.getElementById(key); if (el) el.value = v; }
+        else if (k.indexOf('c:') === 0) { var c = document.getElementById(key); if (c) c.checked = true; }
+        else if (k.indexOf('r:') === 0) setRadio(key, v);
+      });
+    };
+    setAll();
+    for (var i = 1; i <= +(f['r:kids'] || 0); i++) syncChild('c' + i);
+    setAll();                                               // re-apply choices that depend on a child's age
+    for (var j = 1; j <= +(f['r:kids'] || 0); j++) syncChild('c' + j);
+    ['fa', 'mo', 'fil', 'mil'].forEach(function (k) { syncElder(k); var a = document.getElementById(k + '-agree'); if (a && f['c:' + k + '-agree']) a.checked = true; });
+    ['p', 's', 'fa', 'mo', 'fil', 'mil'].forEach(syncDocLabel);
+    sync();
+    var step = Math.min(Math.max(+d.step || 1, 1), 6);
+    while (step > 1 && !applicable(step)) step--;
+    show(step);
+    $('#savedNote').hidden = false;
+  }
+  function fmtStamp(t) { var d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' at ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function showResume() {
+    var d = TOKEN ? null : readDraft();
+    $('#resumeCard').hidden = !d;
+    if (d) $('#resumeText').textContent = 'Started ' + fmtStamp(d.started || d.t) + ', last saved ' + fmtStamp(d.t) +
+      '. Your details are saved on this device only and are removed automatically after ' + DRAFT_DAYS + ' days.';
+    return d;
+  }
+  function exitToStart() { saveDraft(); view('landing'); showResume(); }
   window.__kc = { payload: payload, show: show, next: next, people: people };
   sync(); show(1);
 
@@ -1115,7 +1213,18 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     $('#reg').hidden = !reg; $('#actions').hidden = !reg; $('#stepper').hidden = !reg;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  $('#goRegister').addEventListener('click', function () { view('register'); show(1); });
+  $('#goRegister').addEventListener('click', function () {
+    var d = readDraft();
+    view('register');
+    if (d) applyDraft(d); else show(1);
+  });
+  $('#resumeGo').addEventListener('click', function () { var d = readDraft(); view('register'); if (d) applyDraft(d); else show(1); });
+  $('#resumeNew').addEventListener('click', function () {
+    clearDraft();
+    try { sessionStorage.setItem('kc_start_fresh', '1'); } catch (e) {}
+    window.location.reload();                              // clean, empty form
+  });
+  $('#exitBtn').addEventListener('click', exitToStart);
   $('#goRequest').addEventListener('click', function () { view('request'); setTimeout(function () { $('#rq-id').focus(); }, 300); });
   $('#reqBack').addEventListener('click', function () { $('#reqErr').classList.remove('show'); view('landing'); });
   $('#dupReq').addEventListener('click', function (e) {
@@ -1160,8 +1269,12 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   $('#reqSend').addEventListener('click', sendRequest);
   $('#reqView').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); sendRequest(); } });
 
-  if (TOKEN) startUpdateMode();
-  else view('landing');
+  if (TOKEN) { startUpdateMode(); $('#exitBtn').hidden = true; }
+  else {
+    var fresh = false; try { fresh = sessionStorage.getItem('kc_start_fresh') === '1'; sessionStorage.removeItem('kc_start_fresh'); } catch (e) {}
+    if (fresh) { view('register'); show(1); }
+    else { view('landing'); showResume(); }
+  }
 })();
 </script>
 </body>
