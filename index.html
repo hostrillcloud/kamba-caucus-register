@@ -390,9 +390,9 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
     h += field(k, 'name', 'Full name <span class="opt">(as per ' + (child ? 'birth certificate / National ID' : 'National ID') + ')</span>',
       '<input class="input" id="' + k + '-name" type="text" maxlength="80" autocomplete="' + (k === 'p' ? 'name' : 'off') + '" placeholder="e.g. Elijah Mutua Muema">', 'full', nameHint);
     var elder = /^(fa|mo|fil|mil)$/.test(k);
-    var dMin = elder ? plusDay(shiftYears(todayISO, -101)) : '1900-01-01', dMax = elder ? shiftYears(todayISO, -30) : todayISO;
+    var dMin = elder ? '1920-01-01' : '1900-01-01', dMax = elder ? shiftYears(todayISO, -30) : todayISO;
     h += field(k, 'dob', 'Date of birth', '<input class="input" id="' + k + '-dob" type="date" min="' + dMin + '" max="' + dMax + '"' + (k === 'p' ? ' autocomplete="bday"' : '') + '>', '',
-      elder ? 'Must be aged between 30 and 100 years.' : '');
+      elder ? 'Born on or after 01/01/1920 and at least 30 years old.' : '');
     if (spec.gender) h += field(k, 'gender', 'Gender', seg(k + '-gender', ['Male', 'Female']), '');
     else h += '<div class="field"></div>';
     if (child) {
@@ -587,7 +587,8 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
     if (k === 's' && ageOn(d) < 18) return 'Your spouse must be at least 18 years old.';
     if (/^(fa|mo|fil|mil)$/.test(k)) {
       var a = ageOn(d), who = (k === 'fil' || k === 'mil') ? 'Parents-in-law' : 'Parents';
-      if (a < 30 || a > 100) return who + ' must be between 30 and 100 years old (this date gives ' + a + ' years).';
+      if (d < '1920-01-01') return who + ' must be born on or after 01/01/1920.';
+      if (a < 30) return who + ' must be at least 30 years old (this date gives ' + a + ' years).';
     }
     if (isChild(k) && pd && d < shiftYears(pd, 12)) return "A child must be born at least 12 years after the principal member's date of birth.";
     if ((k === 'fa' || k === 'mo') && pd && d > shiftYears(pd, -12)) return "A parent must be born at least 12 years before the principal member's date of birth.";
