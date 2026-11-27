@@ -242,6 +242,15 @@ footer{max-width:780px;margin:0 auto;text-align:center;color:var(--muted);font-s
 .check{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:600;color:var(--ink)}
 .check input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--navy-2)}
 .adult{border-top:1px dashed var(--line-2);margin-top:4px;padding-top:16px}
+.subfam{margin:4px 0 18px;padding:18px 16px 4px;border:1px solid #BFE3CB;border-radius:14px;background:#FAFDFB}
+.subfam-h{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.subfam-h h4{margin:0;font-size:15.5px;color:var(--navy)}
+.subfam .tag{color:#1F5133;background:#DDF2E3}
+.subfam .person{background:#fff}
+.ro{margin:0 0 20px}
+.ro-val{font-weight:600;color:var(--ink);padding:11px 13px;border:1px dashed var(--line-2);border-radius:10px;background:#fff;margin-top:6px}
+.tag.extra{color:#1F5133;background:#DDF2E3}
+@media (max-width:620px){.subfam{padding:16px 12px 2px}}
 select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center/18px;padding-right:40px}
 .input[readonly]{background:#F3F5F9;color:var(--ink-2)}
 .ubanner{display:flex;gap:12px;align-items:flex-start;margin:22px 28px 0;padding:14px 16px;border-radius:12px;background:var(--gold-soft);border:1px solid #E8D59B;color:var(--navy);font-size:14px}
@@ -339,7 +348,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
       <section class="step" data-step="1">
         <div class="step-head">
-          <div class="kicker">Part 1 of 6</div>
+          <div class="kicker">Part 1 of 7</div>
           <h2>Principal Member</h2>
           <p class="lead">Your details as the registering member. Your ID number links your whole family.</p>
         </div>
@@ -348,7 +357,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
       <section class="step" data-step="2">
         <div class="step-head">
-          <div class="kicker">Part 2 of 6</div>
+          <div class="kicker">Part 2 of 7</div>
           <h2>Spouse</h2>
           <p class="lead">Your husband or wife.</p>
         </div>
@@ -365,7 +374,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
       <section class="step" data-step="3">
         <div class="step-head">
-          <div class="kicker">Part 3 of 6</div>
+          <div class="kicker">Part 3 of 7</div>
           <h2>Children</h2>
           <p class="lead">Choose how many children you have and a form opens for each one.</p>
         </div>
@@ -374,13 +383,36 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
           <div class="seg chips" role="radiogroup" aria-labelledby="q-k" id="kidChips"></div>
           <div class="err">Please choose a number (or None).</div>
         </div>
-        <div class="note" id="kidNote" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div>Children under 18 are registered with a <b>Birth Certificate</b> automatically, and the number is optional. If a child is <b>18 years or above</b>, a few extra questions will appear.</div></div>
+        <div class="note" id="kidNote" hidden><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div>Children under 18 are registered with a <b>Birth Certificate</b> automatically, and the number is optional. If a child is <b>18 years or above</b>, a few extra questions will appear. Kamba Caucus covers up to <b>4 children</b> (under 18, or 18 and above in school).</div></div>
         <div id="slot-children"></div>
+      </section>
+
+      <section class="step" data-step="7">
+        <div class="step-head">
+          <div class="kicker">Part 4 of 7</div>
+          <h2>Siblings</h2>
+          <p class="lead">Your brothers and sisters. This part is optional.</p>
+        </div>
+        <div class="q" data-q="hasSib">
+          <p class="q-title" id="q-sb">Do you want to include siblings?</p>
+          <div class="seg" role="radiogroup" aria-labelledby="q-sb">
+            <input type="radio" name="hasSib" id="sb-y" value="yes"><label for="sb-y">Yes</label>
+            <input type="radio" name="hasSib" id="sb-n" value="no"><label for="sb-n">No</label>
+          </div>
+          <div class="err">Please choose Yes or No.</div>
+        </div>
+        <div class="notice sub" id="sibNote" hidden style="margin:0 0 20px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div id="sibNoteText"></div></div>
+        <div class="q" data-q="sibs" hidden>
+          <p class="q-title" id="q-sn">How many siblings?</p>
+          <div class="seg chips" role="radiogroup" aria-labelledby="q-sn" id="sibChips"></div>
+          <div class="err">Please choose a number.</div>
+        </div>
+        <div id="slot-siblings" hidden></div>
       </section>
 
       <section class="step" data-step="4">
         <div class="step-head">
-          <div class="kicker">Part 4 of 6</div>
+          <div class="kicker">Part 5 of 7</div>
           <h2>Parents</h2>
           <p class="lead">Your own parents.</p>
         </div>
@@ -407,7 +439,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
       <section class="step" data-step="5">
         <div class="step-head">
-          <div class="kicker">Part 5 of 6</div>
+          <div class="kicker">Part 6 of 7</div>
           <h2>Parents-in-Law</h2>
           <p class="lead">Your spouse's parents.</p>
         </div>
@@ -434,7 +466,7 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
 
       <section class="step" data-step="6">
         <div class="step-head">
-          <div class="kicker">Part 6 of 6</div>
+          <div class="kicker">Part 7 of 7</div>
           <h2>Review &amp; Submit</h2>
           <p class="lead">Please check every detail carefully. Use <b>Edit</b> to make changes.</p>
         </div>
@@ -483,7 +515,13 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   'use strict';
   var MAX_KIDS = 8;
   var API_URL = 'https://script.google.com/macros/s/AKfycbwTE6Pi9CxDxfbKtu54fEKVWNd9IP2LkGcRX156O2h1nhZmdEsFhAAceWI48Cp3nOJg/exec';
-  var STEP_LABELS = ['Principal', 'Spouse', 'Children', 'Parents', 'Parents-in-law', 'Review'];
+  // Internal step numbers stay fixed (7 = Siblings); ORDER is the order the member sees.
+  var ORDER = [1, 2, 3, 7, 4, 5, 6];
+  var STEP_NAMES = { 1: 'Principal', 2: 'Spouse', 3: 'Children', 7: 'Siblings', 4: 'Parents', 5: 'Parents-in-law', 6: 'Review' };
+  function pos(n) { return ORDER.indexOf(n); }
+  function stepAfter(n) { var i = pos(n) + 1; while (i < ORDER.length - 1 && !applicable(ORDER[i])) i++; return ORDER[Math.min(i, ORDER.length - 1)]; }
+  function stepBefore(n) { var i = pos(n) - 1; while (i > 0 && !applicable(ORDER[i])) i--; return ORDER[Math.max(0, i)]; }
+  function byPos(a, b) { return pos(a) - pos(b); }
   var RX = {
     NAME: /^[A-Za-zÀ-ÖØ-öø-ÿ][A-Za-zÀ-ÖØ-öø-ÿ .'\-]{1,79}$/,
     DOCNO: /^[A-Z0-9][A-Z0-9\-\/]{2,24}$/,
@@ -512,26 +550,40 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     mil: { title: "Mother-in-law's details", tag: 'Mother-in-law', gender: false, docReq: true, contact: 'optional' }
   };
   function childSpec(i, n) { return { title: 'Child ' + i + ' of ' + n, tag: 'Child', gender: true, docReq: false, contact: 'none', child: true }; }
-  var isChild = function (k) { return /^c\d+$/.test(k); };
+  function grandSpec(i, n) { return { title: 'Child ' + i + ' of ' + n, tag: 'Grandchild', gender: true, docReq: false, contact: 'none', child: true, grand: true }; }
+  function sibSpec(i, n) { return { title: 'Sibling ' + i + ' of ' + n, tag: 'Sibling', gender: true, docReq: true, contact: 'phone' }; }
+  var SUB_SP_SPEC = { title: 'Spouse details', tag: 'Sub-Principal Spouse', gender: true, docReq: true, contact: 'optional' };
+  function subElderSpec(w) { return { title: w === 'fil' ? "Father-in-law's details" : "Mother-in-law's details", tag: w === 'fil' ? 'Father-in-law' : 'Mother-in-law', gender: false, docReq: true, contact: 'optional' }; }
+  var isChild = function (k) { return /^c\d+(g\d+)?$/.test(k); };          // c2 = child, c2g1 = that child's child
+  var isGrand = function (k) { return /^c\d+g\d+$/.test(k); };
+  var isElder = function (k) { return /^(fa|mo|fil|mil|c\d+fil|c\d+mil)$/.test(k); };
+  var isSib = function (k) { return /^b\d+$/.test(k); };
+  var subOf = function (k) { return (/^(c\d+)/.exec(k) || [])[1] || ''; };
+  var COVERED = 4;
+  var EXTRA_MSG = 'Please note: Kamba Caucus covers up to 4 children (under 18, or 18 and above in school). This is an additional child and attracts an additional premium as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.';
+  var SIB_MSG = 'Please note: siblings attract an additional premium as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.';
+  var SUBFAM_MSG = 'Please note: the Sub-Principal&#39;s spouse, children and parents-in-law are registered under the Sub-Principal and attract an additional premium as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.';
+  var GRAND_BLOCK_MSG = 'A child of a Sub-Principal who is <b>18 years or above</b> can only be registered if they are <b>still in school</b>. Please change the answer or remove this child.';
   var ICON_ID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2.2"/><path d="M14 10h4M14 14h3"/></svg>';
   var ICON_WARN = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3l9.5 16.5h-19z"/><path d="M12 10v4M12 17h.01"/></svg>';
   var ICON_INFO = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>';
-  var V2 = 2, ELDER = 75;
+  var V3 = 3, ELDER = 75;
   var ELDER_WORDS = { fa: ['father', 'He'], mo: ['mother', 'She'], fil: ['father-in-law', 'He'], mil: ['mother-in-law', 'She'] };
   var SUB_MSG = 'Your child will be registered as a <b>Sub-Principal member</b> under you. You will be contacted for further information. An additional premium is required, part of which will be paid by Kamba Caucus as per the organisation&#39;s terms and conditions.';
 
   function personHTML(key, spec) {
     var k = key, h = '', child = !!spec.child;
     h += '<div class="person" data-person="' + k + '"><div class="person-head"><span class="tag">' + esc(spec.tag) + '</span><h3>' + esc(spec.title) + '</h3></div><div class="grid">';
+    if (child) h += '<div class="field full" id="' + k + '-extra" hidden><div class="notice sub">' + ICON_INFO + '<div>' + EXTRA_MSG + '</div></div></div>';
     var nameHint = child ? 'Enter the names exactly as they appear on the birth certificate or National ID.'
       : k === 'p' ? 'Enter your names exactly as they appear on your National ID, e.g. Elijah Mutua Muema.'
       : 'Enter the names exactly as they appear on the National ID.';
     h += field(k, 'name', 'Full name <span class="opt">(as per ' + (child ? 'birth certificate / National ID' : 'National ID') + ')</span>',
       '<input class="input" id="' + k + '-name" type="text" maxlength="80" autocomplete="' + (k === 'p' ? 'name' : 'off') + '" placeholder="e.g. Elijah Mutua Muema">', 'full', nameHint);
-    var elder = /^(fa|mo|fil|mil)$/.test(k);
-    var dMin = elder ? '1920-01-01' : '1900-01-01', dMax = elder ? shiftYears(todayISO, -30) : todayISO;
+    var elder = isElder(k), sib = isSib(k);
+    var dMin = elder || sib ? '1920-01-01' : '1900-01-01', dMax = elder ? shiftYears(todayISO, -30) : sib ? shiftYears(todayISO, -18) : todayISO;
     h += field(k, 'dob', 'Date of birth', '<input class="input" id="' + k + '-dob" type="date" min="' + dMin + '" max="' + dMax + '"' + (k === 'p' ? ' autocomplete="bday"' : '') + '>', '',
-      elder ? 'Born on or after 01/01/1920 and at least 30 years old.' : '');
+      elder ? 'Born on or after 01/01/1920 and at least 30 years old.' : sib ? 'Born on or after 01/01/1920 and at least 18 years old.' : '');
     if (spec.gender) h += field(k, 'gender', 'Gender', seg(k + '-gender', ['Male', 'Female']), '');
     else h += '<div class="field"></div>';
     if (elder) {
@@ -551,13 +603,15 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     if (child) h += adultHTML(k);
     if (spec.contact !== 'none') {
       var o = spec.contact === 'optional' ? ' <span class="opt">(optional)</span>' : '';
-      h += field(k, 'email', 'Email address' + o, '<input class="input" id="' + k + '-email" type="email" inputmode="email" maxlength="100" autocomplete="' + (k === 'p' ? 'email' : 'off') + '" placeholder="name@example.com">', '');
+      var oe = spec.contact === 'required' ? '' : ' <span class="opt">(optional)</span>';
+      h += field(k, 'email', 'Email address' + oe, '<input class="input" id="' + k + '-email" type="email" inputmode="email" maxlength="100" autocomplete="' + (k === 'p' ? 'email' : 'off') + '" placeholder="name@example.com">', '');
       h += field(k, 'phone', 'Telephone number' + o, '<input class="input" id="' + k + '-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="' + (k === 'p' ? 'tel' : 'off') + '" placeholder="0712 345 678">', '');
     }
     return h + '</div></div>';
   }
   // Adult-child section: confirmation, school question, school details or Sub-Principal details.
   function adultHTML(k) {
+    var grand = isGrand(k);
     return '<div class="full adult" id="' + k + '-adult" hidden>' +
       '<div class="field" data-f="' + k + '-confirm18"><div class="notice warn">' + ICON_WARN +
         '<div><p><b>This child is 18 years or above.</b></p><label class="check"><input type="checkbox" id="' + k + '-confirm18"><span>I confirm my child is 18 years or above</span></label></div></div><div class="err"></div></div>' +
@@ -567,12 +621,34 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         '<div class="notice info" style="margin-bottom:16px">' + ICON_INFO + '<div>This category is required to provide proof of education. Kamba Caucus will contact you for further details.</div></div>' +
         '</div>' +
       '<div id="' + k + '-subBox" hidden>' +
+        (grand ? '<div class="notice warn" style="margin-bottom:16px">' + ICON_WARN + '<div>' + GRAND_BLOCK_MSG + '</div></div></div>' :
         '<div class="notice sub" style="margin-bottom:16px">' + ICON_INFO + '<div id="' + k + '-subMsg"></div></div>' +
         '<div class="grid">' +
         field(k, 'email', "Child's email address", '<input class="input" id="' + k + '-email" type="email" inputmode="email" maxlength="100" autocomplete="off" placeholder="name@example.com">', '', 'Their own email, not yours.') +
         field(k, 'phone', "Child's telephone number", '<input class="input" id="' + k + '-phone" type="tel" inputmode="tel" maxlength="20" autocomplete="off" placeholder="0712 345 678">', '', 'Their own number, not yours.') +
-        '</div></div>' +
+        '</div>' + subFamHTML(k) + '</div>') +
       '</div>';
+  }
+  // A Sub-Principal's own family: parents shown automatically; spouse, children (under 18 or 18+ in school) and parents-in-law.
+  function subFamHTML(k) {
+    var nm = '<span class="subName" data-sub="' + k + '">this Sub-Principal</span>';
+    var chips = '';
+    for (var n = 0; n <= MAX_KIDS; n++) chips += '<input type="radio" name="' + k + '-gk" id="' + k + '-gk' + n + '" value="' + n + '"><label for="' + k + '-gk' + n + '">' + (n === 0 ? 'None' : n) + '</label>';
+    return '<div class="subfam" id="' + k + '-fam">' +
+      '<div class="subfam-h"><span class="tag">Sub-Principal family</span><h4>' + nm + '&#39;s family</h4></div>' +
+      '<div class="notice sub" style="margin-bottom:18px">' + ICON_INFO + '<div>' + SUBFAM_MSG + '</div></div>' +
+      '<div class="ro"><div class="lab">Parents</div><div class="ro-val" id="' + k + '-ro"></div><div class="hint">Taken automatically from Parts 1 and 2.</div></div>' +
+      '<div class="q" data-q="' + k + '-hasSp"><p class="q-title">Does ' + nm + ' have a spouse?</p>' + seg(k + '-hasSp', [['yes', 'Yes'], ['no', 'No']]) + '<div class="err">Please choose Yes or No.</div></div>' +
+      '<div id="' + k + '-spSlot" hidden>' + personHTML(k + 's', SUB_SP_SPEC) + '</div>' +
+      '<div class="q" data-q="' + k + '-gk"><p class="q-title">How many children does ' + nm + ' have?</p><div class="seg chips" role="radiogroup">' + chips + '</div>' +
+        '<div class="hint" style="margin-top:8px">Children under 18, or 18 and above who are still in school. Up to 4 children are covered.</div><div class="err">Please choose a number (or None).</div></div>' +
+      '<div id="' + k + '-gkSlot" data-n="0"></div>' +
+      '<div id="' + k + '-ilBox" hidden>' +
+        '<div class="q" data-q="' + k + '-il"><p class="q-title">Are both of the spouse&#39;s parents alive?</p>' + seg(k + '-il', [['both', 'Yes, both'], ['one', 'Only one'], ['none', 'Neither']]) + '<div class="err">Please choose an option.</div></div>' +
+        '<div class="q" data-q="' + k + '-wil" hidden><p class="q-title">Which parent is alive?</p>' + seg(k + '-wil', [['a', 'Father-in-law'], ['b', 'Mother-in-law']]) + '<div class="err">Please choose one.</div></div>' +
+        '<div id="' + k + '-filSlot" hidden>' + personHTML(k + 'fil', subElderSpec('fil')) + '</div>' +
+        '<div id="' + k + '-milSlot" hidden>' + personHTML(k + 'mil', subElderSpec('mil')) + '</div>' +
+      '</div></div>';
   }
   function field(k, f, label, control, cls, hint) {
     return '<div class="field ' + (cls || '') + '" data-f="' + k + '-' + f + '"><' + (control.indexOf('class="seg"') > -1 ? 'div class="lab"' : 'label for="' + k + '-' + f + '"') + '>' + label + '</' + (control.indexOf('class="seg"') > -1 ? 'div' : 'label') + '>' +
@@ -612,17 +688,66 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     el('schoolQ').hidden = !adult;
     el('schoolBox').hidden = m !== 'school';
     el('subBox').hidden = m !== 'sub';
-    el('subMsg').innerHTML = SUB_MSG;
+    if (el('subMsg')) el('subMsg').innerHTML = SUB_MSG;
+    var grand = isGrand(k);
     // Document: minor → Birth Certificate (fixed); Sub-Principal → National ID (fixed); in school → choose one.
-    var fixed = m === 'minor' || m === 'sub';
+    var fixed = m === 'minor' || (m === 'sub' && !grand);
     el('docFixed').hidden = !fixed; el('docPick').hidden = fixed;
     el('docFixedName').textContent = m === 'sub' ? 'National ID' : 'Birth Certificate';
     el('docFixedHint').textContent = m === 'sub' ? 'Sub-Principal members are registered with their National ID.' : 'Children under 18 are registered with a Birth Certificate.';
     if (fixed) $$('input[name="' + k + '-doc"]').forEach(function (r) { r.checked = false; });
     if (el('docOpt')) el('docOpt').hidden = m === 'sub';
     var tag = document.querySelector('[data-person="' + k + '"] .tag');
-    if (tag) tag.textContent = m === 'sub' ? 'Sub-Principal' : 'Child';
+    if (tag) tag.textContent = grand ? 'Grandchild' : m === 'sub' ? 'Sub-Principal' : 'Child';
     syncDocLabel(k);
+  }
+  // 4-child rule: the first 4 counted children (under 18, or 18+ in school) in listed order are covered.
+  var EXTRA = {};
+  function groupKeys() {
+    var n = +(radio('kids') || 0), top = [], groups = [];
+    for (var i = 1; i <= n; i++) top.push('c' + i);
+    groups.push(top);
+    top.forEach(function (k) {
+      if (childMode(k) !== 'sub') return;
+      var g = +(radio(k + '-gk') || 0), arr = [];
+      for (var j = 1; j <= g; j++) arr.push(k + 'g' + j);
+      groups.push(arr);
+    });
+    return groups;
+  }
+  function syncExtras() {
+    EXTRA = {};
+    groupKeys().forEach(function (arr) {
+      var c = 0;
+      arr.forEach(function (k) {
+        if (!document.getElementById(k + '-extra')) return;
+        var m = childMode(k), counted = m === 'minor' || m === 'school';
+        if (counted) c++;
+        var extra = counted && c > COVERED;
+        EXTRA[k] = extra;
+        document.getElementById(k + '-extra').hidden = !extra;
+        var tag = document.querySelector('[data-person="' + k + '"] .tag');
+        if (tag) { tag.classList.toggle('extra', extra); if (extra) tag.textContent = 'Additional child'; }
+      });
+    });
+  }
+  function firstName(k, fallback) { var n = properName(readPerson(k).name).split(' ')[0]; return n || fallback; }
+  function syncSub(k) {
+    if (!document.getElementById(k + '-fam') || childMode(k) !== 'sub') return;
+    var who = firstName(k, 'this Sub-Principal');
+    $$('.subName[data-sub="' + k + '"]').forEach(function (s) { s.textContent = who; });
+    var pn = properName(readPerson('p').name), sn = radio('hasSpouse') === 'yes' ? properName(readPerson('s').name) : '';
+    document.getElementById(k + '-ro').textContent = (pn || 'Principal member') + (sn ? ' and ' + sn : '');
+    var sp = radio(k + '-hasSp') === 'yes';
+    document.getElementById(k + '-spSlot').hidden = !sp;
+    document.getElementById(k + '-ilBox').hidden = !sp;
+    var il = radio(k + '-il'), wi = radio(k + '-wil');
+    document.querySelector('[data-q="' + k + '-wil"]').hidden = il !== 'one';
+    document.getElementById(k + '-filSlot').hidden = !(sp && (il === 'both' || (il === 'one' && wi === 'a')));
+    document.getElementById(k + '-milSlot').hidden = !(sp && (il === 'both' || (il === 'one' && wi === 'b')));
+    var want = +(radio(k + '-gk') || 0), slot = document.getElementById(k + '-gkSlot');
+    if (+slot.getAttribute('data-n') !== want) renderGrand(k, want);
+    for (var j = 1; j <= want; j++) syncChild(k + 'g' + j);
   }
   var syncChildDoc = syncChild;
   function syncElder(k) {
@@ -632,8 +757,11 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     var show = a >= ELDER;
     box.hidden = !show;
     if (!show) { document.getElementById(k + '-agree').checked = false; return; }
-    document.getElementById(k + '-75msg').innerHTML = 'Your ' + w[0] + ' is <b>' + a + ' years old</b>. ' + w[1] +
-      ' is not covered under the normal Last Expense cover and will be covered under the <b>Kamba Caucus internal terms</b>.';
+    var fil = /fil$/.test(k);
+    var who = w ? 'Your ' + w[0] : esc(firstName(subOf(k), 'The Sub-Principal')) + '&#39;s ' + (fil ? 'father-in-law' : 'mother-in-law');
+    document.getElementById(k + '-75msg').innerHTML = who + ' is <b>' + a + ' years old</b>. ' + (w ? w[1] : fil ? 'He' : 'She') +
+      ' is not covered under the normal Last Expense cover and will be covered under the <b>Kamba Caucus internal terms</b>.' +
+      (w ? '' : ' As a member of the Sub-Principal&#39;s family, an additional premium applies as per the organisation&#39;s terms and conditions.');
   }
 
   function readPerson(k) {
@@ -681,15 +809,16 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     chk('docNo', !v.docNo ? (spec.docReq ? 'Please enter the document number.' : '') : RX.DOCNO.test(v.docNo) ? '' : 'Use letters, numbers, "-" or "/" only (3–25 characters).');
     if (spec.contact !== 'none') {
       chk('email', !v.email ? (spec.contact === 'required' ? 'Please enter your email address.' : '') : RX.EMAIL.test(v.email) ? '' : 'Please enter a valid email address.');
-      chk('phone', !v.phone ? (spec.contact === 'required' ? 'Please enter your telephone number.' : '') : RX.PHONE.test(v.phone) ? '' : 'Enter a valid number, e.g. 0712345678 or +254712345678.');
+      chk('phone', !v.phone ? (spec.contact === 'required' ? 'Please enter your telephone number.' : spec.contact === 'phone' ? 'Please enter the telephone number.' : '') : RX.PHONE.test(v.phone) ? '' : 'Enter a valid number, e.g. 0712345678 or +254712345678.');
     }
     if (isChild(k)) {
       var m = childMode(k), a = childAge(k);
       if (m !== 'minor') {
         chk('confirm18', v.confirm18 ? '' : 'Please tick to confirm this child is 18 years or above.');
-        chk('inSchool', v.inSchool ? '' : 'Please say whether this child is still in school.');
+        chk('inSchool', !v.inSchool ? 'Please say whether this child is still in school.' :
+          (isGrand(k) && m === 'sub') ? 'A child of a Sub-Principal aged 18 or above must be in school to be registered.' : '');
       }
-      if (m === 'sub') {
+      if (m === 'sub' && !isGrand(k)) {
         var pr = readPerson('p');
         chk('docNo', !v.docNo ? 'Please enter the National ID number.' : RX.DOCNO.test(v.docNo) ? '' : 'Use letters, numbers, "-" or "/" only (3–25 characters).');
         chk('email', !v.email ? "Please enter your child's email address." : !RX.EMAIL.test(v.email) ? 'Please enter a valid email address.' :
@@ -727,6 +856,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   var chipHTML = '';
   for (var n = 0; n <= MAX_KIDS; n++) chipHTML += '<input type="radio" name="kids" id="k' + n + '" value="' + n + '"><label for="k' + n + '">' + (n === 0 ? 'None' : n) + '</label>';
   $('#kidChips').innerHTML = chipHTML;
+  var sibChipHTML = '';
+  for (var sn = 1; sn <= MAX_KIDS; sn++) sibChipHTML += '<input type="radio" name="sibs" id="sn' + sn + '" value="' + sn + '"><label for="sn' + sn + '">' + sn + '</label>';
+  $('#sibChips').innerHTML = sibChipHTML;
+  $('#sibNoteText').innerHTML = SIB_MSG;
   var kidCache = {};
   function renderKids(n) {
     var slot = $('#slot-children');
@@ -736,6 +869,22 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     slot.innerHTML = h;
     for (var j = 1; j <= n; j++) restore(document.querySelector('[data-person="c' + j + '"]'), kidCache['c' + j]);
     $('#kidNote').hidden = n === 0;
+  }
+  function renderGrand(k, n) {
+    var slot = document.getElementById(k + '-gkSlot');
+    $$('.person', slot).forEach(function (el) { kidCache[el.getAttribute('data-person')] = snapshot(el); });
+    var h = '';
+    for (var i = 1; i <= n; i++) h += personHTML(k + 'g' + i, grandSpec(i, n));
+    slot.innerHTML = h; slot.setAttribute('data-n', n);
+    for (var j = 1; j <= n; j++) restore(document.querySelector('[data-person="' + k + 'g' + j + '"]'), kidCache[k + 'g' + j]);
+  }
+  function renderSibs(n) {
+    var slot = $('#slot-siblings');
+    $$('.person', slot).forEach(function (el) { kidCache[el.getAttribute('data-person')] = snapshot(el); });
+    var h = '';
+    for (var i = 1; i <= n; i++) h += personHTML('b' + i, sibSpec(i, n));
+    slot.innerHTML = h;
+    for (var j = 1; j <= n; j++) restore(document.querySelector('[data-person="b' + j + '"]'), kidCache['b' + j]);
   }
   function snapshot(el) {
     var o = {};
@@ -749,12 +898,17 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function restore(el, o) {
     if (!el || !o) return;
     var k = el.getAttribute('data-person');
-    $$('input, select', el).forEach(function (i) {
-      if (i.type === 'radio') i.checked = o[i.name] === i.value;
-      else if (i.type === 'checkbox') i.checked = !!o[i.id];
-      else if (o[i.id] != null) i.value = o[i.id];
-    });
+    var apply = function () {
+      $$('input, select', el).forEach(function (i) {
+        if (i.type === 'radio') i.checked = o[i.name] === i.value;
+        else if (i.type === 'checkbox') i.checked = !!o[i.id];
+        else if (o[i.id] != null) i.value = o[i.id];
+      });
+    };
+    apply();
     syncChild(k);
+    if (isChild(k) && !isGrand(k)) { syncSub(k); apply(); syncChild(k); syncSub(k); }
+    $$('[id$="-75"]', el).forEach(function (b) { var kk = b.id.slice(0, -3); syncElder(kk); var a = document.getElementById(kk + '-agree'); if (a && !b.hidden) a.checked = !!o[kk + '-agree']; });
     if (o[k + '-doc'] && childMode(k) !== 'minor' && childMode(k) !== 'sub') $$('input[name="' + k + '-doc"]').forEach(function (r) { r.checked = r.value === o[k + '-doc']; });
     syncDocLabel(k);
   }
@@ -776,24 +930,28 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     $('[data-q="whichInlaw"]').hidden = il !== 'one';
     $('#slot-fil').hidden = !(il === 'both' || (il === 'one' && wi === 'a'));
     $('#slot-mil').hidden = !(il === 'both' || (il === 'one' && wi === 'b'));
+    var hb = radio('hasSib') === 'yes';
+    $('[data-q="sibs"]').hidden = !hb; $('#sibNote').hidden = !hb; $('#slot-siblings').hidden = !hb;
+    for (var i = 1; i <= +(radio('kids') || 0); i++) syncSub('c' + i);
+    syncExtras();
     renderStepper();
   }
 
   document.addEventListener('change', function (e) {
     var t = e.target; dirty = true;
     if (t.name === 'kids') { renderKids(+t.value); setErr('kids', ''); }
+    if (t.name === 'sibs') { renderSibs(+t.value); setErr('sibs', ''); }
     if (/-doc$/.test(t.name)) syncDocLabel(t.name.replace(/-doc$/, ''));
-    if (/^c\d+-dob$/.test(t.id)) syncChild(t.id.split('-')[0]);
-    if (/^c\d+-inSchool$/.test(t.name)) syncChild(t.name.split('-')[0]);
-    if (/^(fa|mo|fil|mil)-dob$/.test(t.id)) syncElder(t.id.split('-')[0]);
+    if (/-dob$/.test(t.id)) { var dk = t.id.slice(0, -4); if (isChild(dk)) syncChild(dk); if (isElder(dk)) syncElder(dk); }
+    if (/^c\d+(g\d+)?-inSchool$/.test(t.name)) syncChild(t.name.split('-')[0]);
     if (t.name && document.querySelector('[data-q="' + t.name + '"]')) setErr(t.name, '');
     var f = t.closest && t.closest('.field'); if (f) f.classList.remove('invalid');
     if (t.id === 'consent') { $('[data-q="consentErr"]').classList.remove('invalid'); }
     sync();
   });
   document.addEventListener('input', function (e) {
-    dirty = true; if (/^c\d+-dob$/.test(e.target.id)) syncChild(e.target.id.split('-')[0]);
-    if (/^(fa|mo|fil|mil)-dob$/.test(e.target.id)) syncElder(e.target.id.split('-')[0]);
+    dirty = true;
+    if (/-dob$/.test(e.target.id)) { var dk = e.target.id.slice(0, -4); if (isChild(dk)) { syncChild(dk); syncExtras(); } if (isElder(dk)) syncElder(dk); }
     var f = e.target.closest && e.target.closest('.field');
     if (f && f.classList.contains('invalid')) f.classList.remove('invalid');
   });
@@ -802,19 +960,19 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   function applicable(n) { return n !== 5 || radio('hasSpouse') !== 'no'; }
   function renderStepper() {
     var h = '';
-    for (var i = 1; i <= 6; i++) {
-      var cls = i === cur ? 'current' : !applicable(i) ? 'skipped' : i < cur ? 'past' : '';
-      h += '<li class="' + cls + '"' + (i === cur ? ' aria-current="step"' : '') + '><div class="bar"></div><span class="lbl">' + STEP_LABELS[i - 1] + (applicable(i) ? '' : ' (n/a)') + '</span></li>';
-    }
+    ORDER.forEach(function (i) {
+      var cls = i === cur ? 'current' : !applicable(i) ? 'skipped' : pos(i) < pos(cur) ? 'past' : '';
+      h += '<li class="' + cls + '"' + (i === cur ? ' aria-current="step"' : '') + '><div class="bar"></div><span class="lbl">' + STEP_NAMES[i] + (applicable(i) ? '' : ' (n/a)') + '</span></li>';
+    });
     $('#steps').innerHTML = h;
-    var total = [1, 2, 3, 4, 5, 6].filter(applicable).length;
-    var pos = [1, 2, 3, 4, 5, 6].filter(function (i) { return applicable(i) && i <= cur; }).length;
-    $('#stepNow').innerHTML = 'Step <b>' + pos + '</b> of ' + total + ' · <b>' + STEP_LABELS[cur - 1] + '</b>';
+    var total = ORDER.filter(applicable).length;
+    var at = ORDER.filter(function (i) { return applicable(i) && pos(i) <= pos(cur); }).length;
+    $('#stepNow').innerHTML = 'Step <b>' + at + '</b> of ' + total + ' · <b>' + STEP_NAMES[cur] + '</b>';
   }
   function show(n) {
     cur = n;
     $$('.step').forEach(function (s) { s.classList.toggle('active', +s.getAttribute('data-step') === n); });
-    var noBack = TOKEN && (FOCUS ? !FOCUS.some(function (s) { return s < n; }) : n === 1);
+    var noBack = TOKEN && (FOCUS ? !FOCUS.some(function (s) { return pos(s) < pos(n); }) : n === 1);
     $('#back').style.visibility = noBack ? 'hidden' : 'visible';
     queueSave();                                            // remember which part the member is on
     var nx = $('#next');
@@ -832,12 +990,25 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     var d = dobOf(k), pd = dobOf('p'), sd = dobOf('s');
     if (!d) return '';
     if (k === 's' && ageOn(d) < 18) return 'Your spouse must be at least 18 years old.';
-    if (/^(fa|mo|fil|mil)$/.test(k)) {
-      var a = ageOn(d), who = (k === 'fil' || k === 'mil') ? 'Parents-in-law' : 'Parents';
+    if (/^c\d+s$/.test(k) && ageOn(d) < 18) return 'The spouse must be at least 18 years old.';
+    if (isSib(k)) {
+      if (d < '1920-01-01') return 'Siblings must be born on or after 01/01/1920.';
+      if (ageOn(d) < 18) return 'Siblings must be at least 18 years old.';
+    }
+    if (isGrand(k)) {
+      var sb = dobOf(subOf(k));
+      if (sb && d < shiftYears(sb, 12)) return "A child must be born at least 12 years after the Sub-Principal's date of birth.";
+    }
+    if (/^c\d+(fil|mil)$/.test(k)) {
+      var ssd = dobOf(subOf(k) + 's');
+      if (d >= '1920-01-01' && ageOn(d) >= 30 && ssd && d > shiftYears(ssd, -12)) return "A parent-in-law must be born at least 12 years before the spouse's date of birth.";
+    }
+    if (isElder(k)) {
+      var a = ageOn(d), who = /(fil|mil)$/.test(k) ? 'Parents-in-law' : 'Parents';
       if (d < '1920-01-01') return who + ' must be born on or after 01/01/1920.';
       if (a < 30) return who + ' must be at least 30 years old (this date gives ' + a + ' years).';
     }
-    if (isChild(k) && pd && d < shiftYears(pd, 12)) return "A child must be born at least 12 years after the principal member's date of birth.";
+    if (isChild(k) && !isGrand(k) && pd && d < shiftYears(pd, 12)) return "A child must be born at least 12 years after the principal member's date of birth.";
     if ((k === 'fa' || k === 'mo') && pd && d > shiftYears(pd, -12)) return "A parent must be born at least 12 years before the principal member's date of birth.";
     if ((k === 'fil' || k === 'mil') && sd && d > shiftYears(sd, -12)) return "A parent-in-law must be born at least 12 years before your spouse's date of birth.";
     return '';
@@ -854,7 +1025,28 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     if (n === 2) { q('hasSpouse', radio('hasSpouse')); if (radio('hasSpouse') === 'yes') per('s', SPECS.s); }
     if (n === 3) {
       var k = radio('kids'); q('kids', k !== null);
-      for (var i = 1; i <= +(k || 0); i++) per('c' + i, childSpec(i, +k));
+      for (var i = 1; i <= +(k || 0); i++) {
+        var ck = 'c' + i;
+        per(ck, childSpec(i, +k));
+        if (childMode(ck) !== 'sub') continue;
+        var hs = radio(ck + '-hasSp'); q(ck + '-hasSp', hs);
+        if (hs === 'yes') per(ck + 's', SUB_SP_SPEC);
+        var gk = radio(ck + '-gk'); q(ck + '-gk', gk !== null);
+        for (var j = 1; j <= +(gk || 0); j++) per(ck + 'g' + j, grandSpec(j, +gk));
+        if (hs === 'yes') {
+          var il = radio(ck + '-il'), wi = radio(ck + '-wil'); q(ck + '-il', il);
+          if (il === 'one') q(ck + '-wil', wi);
+          if (il === 'both' || (il === 'one' && wi === 'a')) per(ck + 'fil', subElderSpec('fil'));
+          if (il === 'both' || (il === 'one' && wi === 'b')) per(ck + 'mil', subElderSpec('mil'));
+        }
+      }
+    }
+    if (n === 7) {
+      var hb = radio('hasSib'); q('hasSib', hb);
+      if (hb === 'yes') {
+        var sn = radio('sibs'); q('sibs', sn !== null);
+        for (var si = 1; si <= +(sn || 0); si++) per('b' + si, sibSpec(si, +sn));
+      }
     }
     if (n === 4 || n === 5) {
       var g = n === 4 ? 'parents' : 'inlaws', w = n === 4 ? 'whichParent' : 'whichInlaw';
@@ -880,7 +1072,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     if (sending || checking) return;
     if (!validateStep(cur)) return;
     if (cur === 6 && TOKEN) {                               // update: re-check the parts the member skipped
-      for (var s = 1; s <= 5; s++) {
+      for (var si = 0; si < ORDER.length - 1; si++) {
+        var s = ORDER[si];
         if (!applicable(s)) continue;
         show(s);
         if (!validateStep(s)) return;
@@ -889,8 +1082,8 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     }
     if (cur === 6) return submit();
     var go = function () {
-      if (TOKEN && FOCUS) { var nx = FOCUS.filter(function (s) { return s > cur; })[0]; show(nx || 6); return; }   // update: only the parts that need attention
-      var n = cur + 1; while (!applicable(n)) n++; show(n);
+      if (TOKEN && FOCUS) { var nx = FOCUS.filter(function (s) { return pos(s) > pos(cur); })[0]; show(nx || 6); return; }   // update: only the parts that need attention
+      show(stepAfter(cur));
     };
     if (cur === 1) return guardThen(go);
     go();
@@ -944,9 +1137,9 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     }, 250);
   });
   function back() {
-    if (TOKEN && FOCUS) { var pv = FOCUS.filter(function (s) { return s < cur; }); if (pv.length) show(pv[pv.length - 1]); return; }
+    if (TOKEN && FOCUS) { var pv = FOCUS.filter(function (s) { return pos(s) < pos(cur); }); if (pv.length) show(pv[pv.length - 1]); return; }
     if (cur === 1) { if (!TOKEN) exitToStart(); return; }      // Back on Part 1 → start page (progress is saved)
-    var n = cur - 1; while (n > 1 && !applicable(n)) n--; show(Math.max(1, n));
+    show(stepBefore(cur));
   }
   $('#next').addEventListener('click', next);
   $('#back').addEventListener('click', back);
@@ -958,13 +1151,30 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   // ── Payload + review ──
   function payload() {
     var hasSpouse = radio('hasSpouse') === 'yes', kids = +(radio('kids') || 0), out = {
-      v: V2, sid: sid, startedAt: startedAt, website: $('#website').value,
+      v: V3, sid: sid, startedAt: startedAt, website: $('#website').value,
       principal: readPerson('p'), hasSpouse: hasSpouse, spouse: hasSpouse ? readPerson('s') : null, children: [],
       parents: radio('parents'), whichParent: radio('whichParent'),
       father: null, mother: null, inlaws: null, whichInlaw: null, fil: null, mil: null,
       consent: $('#consent').checked
     };
-    for (var i = 1; i <= kids; i++) out.children.push(readPerson('c' + i));
+    for (var i = 1; i <= kids; i++) {
+      var k = 'c' + i, c = readPerson(k);
+      if (childMode(k) === 'sub') {
+        var hs = radio(k + '-hasSp'), gk = radio(k + '-gk');
+        c.hasSpouse = hs === 'yes' ? true : hs === 'no' ? false : null;
+        c.spouse = c.hasSpouse ? readPerson(k + 's') : null;
+        c.kids = gk === null ? null : [];
+        for (var j = 1; j <= +(gk || 0); j++) c.kids.push(readPerson(k + 'g' + j));
+        c.inlaws = c.hasSpouse ? radio(k + '-il') : null; c.whichInlaw = c.hasSpouse ? radio(k + '-wil') : null;
+        c.fil = c.hasSpouse && !document.getElementById(k + '-filSlot').hidden ? readPerson(k + 'fil') : null;
+        c.mil = c.hasSpouse && !document.getElementById(k + '-milSlot').hidden ? readPerson(k + 'mil') : null;
+      }
+      out.children.push(c);
+    }
+    var hb = radio('hasSib');
+    out.hasSiblings = hb === 'yes' ? true : hb === 'no' ? false : null;
+    out.siblings = [];
+    if (hb === 'yes') for (var b = 1; b <= +(radio('sibs') || 0); b++) out.siblings.push(readPerson('b' + b));
     if (!$('#slot-father').hidden) out.father = readPerson('fa');
     if (!$('#slot-mother').hidden) out.mother = readPerson('mo');
     if (hasSpouse) {
@@ -979,11 +1189,23 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     function add(x, rel, step, gender) { list.push({ x: x, rel: rel, step: step, gender: gender || x.gender }); }
     add(p.principal, 'Principal', 1);
     if (p.spouse) add(p.spouse, p.spouse.gender === 'Female' ? 'Wife' : 'Husband', 2);
+    var last = function (o) { var x = list[list.length - 1]; for (var q in o) x[q] = o[q]; };
     p.children.forEach(function (c, i) {
-      var m = childMode('c' + (i + 1));
-      add(c, (c.gender === 'Female' ? 'Daughter' : 'Son') + (m === 'sub' ? ' · Sub-Principal' : ''), 3);
-      list[list.length - 1].mode = m;
+      var k = 'c' + (i + 1), m = childMode(k);
+      add(c, (c.gender === 'Female' ? 'Daughter' : 'Son') + (m === 'sub' ? ' · Sub-Principal' : EXTRA[k] ? ' · Additional child' : ''), 3);
+      last({ mode: m, extra: !!EXTRA[k] });
+      if (m !== 'sub') return;
+      var who = properName(c.name).split(' ')[0] || 'Sub-Principal';
+      if (c.spouse) { add(c.spouse, who + "'s spouse · " + (c.spouse.gender === 'Female' ? 'Daughter-in-law' : 'Son-in-law'), 3); last({ subfam: true }); }
+      (c.kids || []).forEach(function (g, j) {
+        var gk = k + 'g' + (j + 1);
+        add(g, who + "'s child · " + (g.gender === 'Female' ? 'Granddaughter' : 'Grandson') + (EXTRA[gk] ? ' · Additional child' : ''), 3);
+        last({ mode: childMode(gk) === 'school' ? 'school' : 'minor', extra: !!EXTRA[gk], subfam: true });
+      });
+      if (c.fil) { add(c.fil, who + "'s father-in-law", 3, 'Male'); last({ subfam: true }); }
+      if (c.mil) { add(c.mil, who + "'s mother-in-law", 3, 'Female'); last({ subfam: true }); }
     });
+    p.siblings.forEach(function (s) { add(s, 'Sibling', 7); last({ sib: true }); });
     if (p.father) add(p.father, 'Father', 4, 'Male');
     if (p.mother) add(p.mother, 'Mother', 4, 'Female');
     if (p.fil) add(p.fil, 'Father-in-law', 5, 'Male');
@@ -1010,6 +1232,9 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
         (x.phone ? '<dt>Telephone</dt><dd>' + esc(x.phone) + '</dd>' : '') +
         (o.mode === 'school' ? '<div class="flag">In school: This category is required to provide proof of education. Kamba Caucus will contact you for further details.</div>' : '') +
         (o.mode === 'sub' ? '<div class="flag">Sub-Principal member: an additional premium is required, part of which will be paid by Kamba Caucus as per the organisation&#39;s terms and conditions. You will be contacted for further information.</div>' : '') +
+        (o.extra ? '<div class="flag">Additional child: Kamba Caucus covers up to 4 children (under 18, or 18 and above in school). This child attracts an additional premium as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.</div>' : '') +
+        (o.subfam && !o.extra ? '<div class="flag">Sub-Principal family: an additional premium applies as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.</div>' : '') +
+        (o.sib ? '<div class="flag">Sibling: an additional premium applies as per the organisation&#39;s terms and conditions. Kamba Caucus will communicate further details.</div>' : '') +
         (x.agree75 ? '<div class="flag">Aged 75+: covered under the Kamba Caucus internal terms. ✓ Agreed</div>' : '') +
         '</dl></div>';
     });
@@ -1100,12 +1325,20 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       if (head && !head.querySelector('.need')) head.insertAdjacentHTML('beforeend', '<span class="need">Needs your attention</span>');
       parts[part] = 1; marks++;
     };
-    (f.children || []).forEach(function (c, i) { var k = 'c' + (i + 1); if (childAge(k) >= 18 && !c.inSchool) mark(k, 3); });
+    (f.children || []).forEach(function (c, i) {
+      var k = 'c' + (i + 1);
+      if (childAge(k) >= 18 && !c.inSchool) mark(k, 3);
+      else if (c.inSchool === 'no' && (c.hasSpouse == null || c.kids == null)) mark(k, 3);     // Sub-Principal's own family not yet captured
+      ['fil', 'mil'].forEach(function (w) {
+        var box = document.getElementById(k + w + '-75'), slot = document.getElementById(k + '-' + w + 'Slot');
+        if (box && !box.hidden && slot && !slot.hidden) mark(k + w, 3);
+      });
+    });
     [['fa', 4, '#slot-father'], ['mo', 4, '#slot-mother'], ['fil', 5, '#slot-fil'], ['mil', 5, '#slot-mil']].forEach(function (x) {
       var box = document.getElementById(x[0] + '-75');
       if (!$(x[2]).hidden && box && !box.hidden) mark(x[0], x[1]);
     });
-    var list = Object.keys(parts).map(Number).sort(function (a, b) { return a - b; });
+    var list = Object.keys(parts).map(Number).sort(byPos);
     list.marks = marks;
     return list;
   }
@@ -1122,7 +1355,16 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
       if (childMode(k) === 'school' || childMode(k) === 'undecided') setRadio(k + '-doc', x.doc);
       syncChild(k);
     }
-    if (/^(fa|mo|fil|mil)$/.test(k)) syncElder(k);
+    if (isElder(k)) syncElder(k);
+  }
+  function fillSub(k, c) {
+    if (c.hasSpouse === true || c.hasSpouse === false) setRadio(k + '-hasSp', c.hasSpouse ? 'yes' : 'no');
+    if (c.hasSpouse) fillPerson(k + 's', c.spouse);
+    if (Array.isArray(c.kids)) setRadio(k + '-gk', c.kids.length);
+    syncSub(k);
+    (c.kids || []).forEach(function (g, j) { fillPerson(k + 'g' + (j + 1), g); });
+    if (c.hasSpouse) { setRadio(k + '-il', c.inlaws); setRadio(k + '-wil', c.whichInlaw); syncSub(k); fillPerson(k + 'fil', c.fil); fillPerson(k + 'mil', c.mil); }
+    syncSub(k);
   }
   function fill(f) {
     fillPerson('p', f.principal);
@@ -1134,7 +1376,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     setRadio('hasSpouse', f.hasSpouse ? 'yes' : 'no');
     if (f.hasSpouse) fillPerson('s', f.spouse);
     setRadio('kids', f.children.length); renderKids(f.children.length);
-    f.children.forEach(function (c, i) { fillPerson('c' + (i + 1), c); });
+    f.children.forEach(function (c, i) { fillPerson('c' + (i + 1), c); if (c.inSchool === 'no') fillSub('c' + (i + 1), c); });
+    var sibs = Array.isArray(f.siblings) ? f.siblings : [];
+    setRadio('hasSib', f.hasSiblings && sibs.length ? 'yes' : 'no');
+    if (f.hasSiblings && sibs.length) { setRadio('sibs', sibs.length); renderSibs(sibs.length); sibs.forEach(function (s, i) { fillPerson('b' + (i + 1), s); }); }
     setRadio('parents', f.parents); setRadio('whichParent', f.whichParent);
     fillPerson('fa', f.father); fillPerson('mo', f.mother);
     if (f.hasSpouse) { setRadio('inlaws', f.inlaws); setRadio('whichInlaw', f.whichInlaw); fillPerson('fil', f.fil); fillPerson('mil', f.mil); }
@@ -1212,8 +1457,9 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   document.addEventListener('change', queueSave);
   function applyDraft(d) {
     var f = d.f || {};
-    ['hasSpouse', 'parents', 'whichParent', 'inlaws', 'whichInlaw'].forEach(function (n) { if (f['r:' + n]) setRadio(n, f['r:' + n]); });
+    ['hasSpouse', 'parents', 'whichParent', 'inlaws', 'whichInlaw', 'hasSib'].forEach(function (n) { if (f['r:' + n]) setRadio(n, f['r:' + n]); });
     if (f['r:kids'] != null) { setRadio('kids', f['r:kids']); renderKids(+f['r:kids']); }
+    if (f['r:sibs'] != null) { setRadio('sibs', f['r:sibs']); renderSibs(+f['r:sibs']); }
     var setAll = function () {
       Object.keys(f).forEach(function (k) {
         var v = f[k], key = k.slice(2);
@@ -1226,11 +1472,13 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     for (var i = 1; i <= +(f['r:kids'] || 0); i++) syncChild('c' + i);
     setAll();                                               // re-apply choices that depend on a child's age
     for (var j = 1; j <= +(f['r:kids'] || 0); j++) syncChild('c' + j);
-    ['fa', 'mo', 'fil', 'mil'].forEach(function (k) { syncElder(k); var a = document.getElementById(k + '-agree'); if (a && f['c:' + k + '-agree']) a.checked = true; });
-    ['p', 's', 'fa', 'mo', 'fil', 'mil'].forEach(syncDocLabel);
+    for (var pass = 0; pass < 2; pass++) { sync(); setAll(); $$('.person').forEach(function (el) { syncChild(el.getAttribute('data-person')); }); }   // Sub-Principal families
+    $$('[id$="-75"]').forEach(function (b) { var k = b.id.slice(0, -3); syncElder(k); var a = document.getElementById(k + '-agree'); if (a && f['c:' + k + '-agree']) a.checked = true; });
+    $$('.person').forEach(function (el) { syncDocLabel(el.getAttribute('data-person')); });
     sync();
-    var step = Math.min(Math.max(+d.step || 1, 1), 6);
-    while (step > 1 && !applicable(step)) step--;
+    var step = +d.step || 1;
+    if (pos(step) < 0) step = 1;
+    while (step !== 1 && !applicable(step)) step = stepBefore(step);
     show(step);
     $('#savedNote').hidden = false;
   }
