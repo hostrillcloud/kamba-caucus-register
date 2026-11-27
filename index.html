@@ -165,6 +165,16 @@ input[type=date].input{appearance:none;-webkit-appearance:none;min-height:50px}
 
 /* Review */
 .rv{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.addmore{border:1px solid #E7D9A6;background:linear-gradient(180deg,#FFFCF2,#FFF);border-radius:14px;padding:18px 18px 16px;margin:0 0 18px;position:relative}
+.addmore:before{content:"";position:absolute;left:-1px;top:16px;bottom:16px;width:3px;border-radius:3px;background:var(--gold)}
+.addmore h4{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.addmore p{margin:0 0 14px;font-size:13.5px;color:var(--muted);line-height:1.5}
+.addgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.addbtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--line-2);background:#fff;border-radius:12px;padding:11px 14px;cursor:pointer;font:inherit;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.addbtn:hover,.addbtn:focus-visible{border-color:var(--navy-2);box-shadow:0 6px 16px -10px rgba(27,42,74,.45);outline:none}
+.addbtn b{font-size:14.5px;color:var(--navy)}
+.addbtn span{font-size:12.5px;color:var(--muted)}
+@media (max-width:620px){.addgrid{grid-template-columns:1fr 1fr}.addbtn{padding:10px 12px}.addbtn b{font-size:13.5px}}
 .rv-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;background:#F8F9FB;border-bottom:1px solid var(--line)}
 .rv-h b{color:var(--navy);font-size:15px}
 .rv-h .rel{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-2)}
@@ -969,8 +979,10 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     var at = ORDER.filter(function (i) { return applicable(i) && pos(i) <= pos(cur); }).length;
     $('#stepNow').innerHTML = 'Step <b>' + at + '</b> of ' + total + ' · <b>' + STEP_NAMES[cur] + '</b>';
   }
+  var reachedReview = false;
   function show(n) {
     cur = n;
+    if (n === 6 && TOKEN) reachedReview = true;
     $$('.step').forEach(function (s) { s.classList.toggle('active', +s.getAttribute('data-step') === n); });
     var noBack = TOKEN && (FOCUS ? !FOCUS.some(function (s) { return pos(s) < pos(n); }) : n === 1);
     $('#back').style.visibility = noBack ? 'hidden' : 'visible';
@@ -1082,7 +1094,12 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
     }
     if (cur === 6) return submit();
     var go = function () {
-      if (TOKEN && FOCUS) { var nx = FOCUS.filter(function (s) { return pos(s) > pos(cur); })[0]; show(nx || 6); return; }   // update: only the parts that need attention
+      if (TOKEN && FOCUS) {
+        if (cur === 2 && radio('hasSpouse') === 'yes' && !radio('inlaws')) { show(5); return; }   // spouse just added → ask about parents-in-law
+        if (cur === 7 && radio('hasSib') === 'yes' && radio('sibs') === null) { show(7); return; }
+        if (reachedReview) { show(6); return; }                 // after Review: Continue always returns to Review
+        var nx = FOCUS.filter(function (s) { return pos(s) > pos(cur); })[0]; show(nx || 6); return;
+      }   // update: only the parts that need attention
       show(stepAfter(cur));
     };
     if (cur === 1) return guardThen(go);
@@ -1219,8 +1236,22 @@ select.input{appearance:none;-webkit-appearance:none;background:#fff url("data:i
   }
   function fmtDate(iso) { var p = (iso || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : ''; }
   function properName(s) { return (s === s.toLowerCase() || s === s.toUpperCase()) ? s.toLowerCase().replace(/(^|[\s'\-])(\S)/g, function (m, a, b) { return a + b.toUpperCase(); }) : s; }
+  // Update links: after the highlighted items, members can also add or change anyone (same rules and notices).
+  function addMoreHTML() {
+    var n = function (c, one, many) { return c === 0 ? 'None recorded' : c + ' ' + (c === 1 ? one : many) + ' recorded'; };
+    var kids = +(radio('kids') || 0), sibs = radio('hasSib') === 'yes' ? +(radio('sibs') || 0) : 0, sp = radio('hasSpouse') === 'yes';
+    var par = radio('parents'), il = radio('inlaws');
+    var b = [['7', '+ Add siblings', n(sibs, 'sibling', 'siblings')],
+      ['3', '+ Add or change children', n(kids, 'child', 'children')]];
+    if (!sp) b.push(['2', '+ Add spouse', 'None recorded']);
+    b.push(['4', '+ Add parents', par === 'both' ? '2 parents recorded' : par === 'one' ? '1 parent recorded' : 'None recorded']);
+    if (sp) b.push(['5', '+ Add parents-in-law', il === 'both' ? '2 parents-in-law recorded' : il === 'one' ? '1 parent-in-law recorded' : 'None recorded']);
+    return '<div class="addmore" id="addMore"><h4>Would you like to add anyone else?</h4>' +
+      '<p>You can also add or change family members, for example siblings or a Sub-Principal&#39;s family. The same rules and notices apply. If nothing else is needed, simply submit below.</p>' +
+      '<div class="addgrid">' + b.map(function (x) { return '<button type="button" class="addbtn" data-edit="' + x[0] + '"><b>' + x[1] + '</b><span>' + x[2] + '</span></button>'; }).join('') + '</div></div>';
+  }
   function buildReview() {
-    var h = '';
+    var h = TOKEN ? addMoreHTML() : '';
     people().forEach(function (o) {
       var x = o.x;
       h += '<div class="rv"><div class="rv-h"><div><span class="rel">' + esc(o.rel) + '</span><br><b>' + esc(properName(x.name)) + '</b></div><button type="button" class="link" data-edit="' + o.step + '">Edit</button></div><dl>' +
